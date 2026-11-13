@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Design System</title>
+<link rel="stylesheet" href="tokens.css">
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--color-canvas);
+    color: var(--color-ink);
+    font-family: var(--font-family);
+    font-size: var(--text-body-size);
+    font-weight: var(--text-body-weight);
+    line-height: var(--text-body-line);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Khung trang */
+  .topbar {
+    position: sticky; top: 0; z-index: 10;
+    display: flex; align-items: center; gap: var(--space-md);
+    padding: var(--space-sm) var(--space-lg);
+    background: var(--color-canvas);
+    border-bottom: 1px solid var(--color-hairline);
+  }
+  .topbar strong { font-size: var(--text-title-size); font-weight: 800; }
+  .topbar nav { display: flex; gap: var(--space-xs); margin-left: auto; overflow-x: auto; }
+  .topbar a {
+    color: var(--color-muted); text-decoration: none; white-space: nowrap;
+    font-size: var(--text-ui-size); padding: var(--space-xs) var(--space-sm);
+    border-radius: var(--radius-full);
+  }
+  .topbar a:hover { color: var(--color-ink); background: var(--color-surface); }
+  main { max-width: 1120px; margin: 0 auto; padding: var(--space-xxl) var(--space-lg) var(--space-xxxl); }
+  section { padding-block: var(--space-xxl); border-bottom: 1px solid var(--color-hairline); }
+  section:last-child { border-bottom: 0; }
+  .eyebrow { color: var(--color-muted); font-size: var(--text-caption-size); text-transform: uppercase; letter-spacing: .06em; margin: 0 0 var(--space-xs); }
+  h1 { font-size: var(--text-display-size); font-weight: 800; line-height: var(--text-display-line); margin: 0 0 var(--space-sm); }
+  h2 { font-size: var(--text-heading-size); font-weight: 800; line-height: var(--text-heading-line); margin: 0 0 var(--space-lg); }
+  h3 { font-size: var(--text-title-size); font-weight: 600; margin: var(--space-xl) 0 var(--space-md); color: var(--color-muted); }
+  .lead { color: var(--color-muted); max-width: 640px; margin: 0; }
+  code { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 12px; color: var(--color-muted); }
+  .row { display: flex; flex-wrap: wrap; gap: var(--space-md); align-items: center; }
+  .grid { display: grid; gap: var(--space-md); grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+
+  /* Bảng màu */
+  .swatch { background: var(--color-surface); border: 1px solid var(--color-hairline); border-radius: var(--radius-card); overflow: hidden; }
+  .swatch .chip { height: 72px; border-bottom: 1px solid var(--color-hairline); }
+  .swatch .meta { padding: var(--space-sm) var(--space-md) var(--space-md); }
+  .swatch .name { display: block; font-size: var(--text-ui-size); }
+  .swatch .hex { display: block; color: var(--color-muted); font-size: var(--text-caption-size); }
+
+  /* Kiểu chữ */
+  .type-row { display: grid; grid-template-columns: 140px 1fr; gap: var(--space-lg); align-items: baseline; padding-block: var(--space-md); border-bottom: 1px solid var(--color-hairline); }
+  .type-row:last-child { border-bottom: 0; }
+  .type-row .spec { color: var(--color-muted); font-size: var(--text-caption-size); }
+  .t-display { font-size: var(--text-display-size); font-weight: 800; line-height: var(--text-display-line); }
+  .t-heading { font-size: var(--text-heading-size); font-weight: 800; line-height: var(--text-heading-line); }
+  .t-title   { font-size: var(--text-title-size); font-weight: 600; line-height: var(--text-title-line); }
+  .t-body    { font-size: var(--text-body-size); font-weight: 600; line-height: var(--text-body-line); }
+  .t-ui      { font-size: var(--text-ui-size); font-weight: 600; line-height: var(--text-ui-line); }
+  .t-caption { font-size: var(--text-caption-size); font-weight: 600; line-height: var(--text-caption-line); }
+
+  /* Khoảng cách & bo góc */
+  .space-item { display: flex; align-items: center; gap: var(--space-md); }
+  .space-item .bar { height: 16px; background: var(--color-secondary); border-radius: 2px; }
+  .space-item span { width: 120px; color: var(--color-muted); font-size: var(--text-caption-size); }
+  .radius-box { width: 96px; height: 72px; background: var(--color-surface); border: 1px solid var(--color-hairline); display: grid; place-items: center; font-size: var(--text-caption-size); color: var(--color-muted); }
+
+  /* ── Nút bấm ── */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: var(--space-xs);
+    min-height: 40px; padding: var(--space-sm) var(--space-md);
+    border: 0; border-radius: var(--radius-lg);
+    font: inherit; font-size: var(--text-body-size); font-weight: 600; line-height: 1;
+    cursor: pointer; text-decoration: none;
+    transition: background-color .15s, transform .05s;
+  }
+  .btn:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+  .btn:active { transform: translateY(1px); }
+  .btn-primary { background: var(--color-primary); color: var(--color-on-primary); }
+  .btn-primary:hover { background: var(--color-primary-hover); }
+  .btn-primary:active { background: var(--color-primary-active); }
+  .btn-secondary { background: var(--color-secondary); color: var(--color-on-primary); }
+  .btn-secondary:hover { background: var(--color-secondary-hover); }
+  .btn-secondary:active { background: var(--color-secondary-active); }
+  .btn-tertiary { background: var(--color-surface); color: var(--color-ink); border-radius: var(--radius-xl); }
+  .btn-tertiary:hover { background: var(--color-surface-hover); }
+  .btn-ghost { background: transparent; color: var(--color-muted); padding-inline: var(--space-sm); }
+  .btn-ghost:hover { background: var(--color-surface); color: var(--color-ink); }
+  .btn-lg { min-height: 48px; padding-inline: var(--space-xxl); font-size: var(--text-title-size); }
+  .btn-sm { min-height: 32px; padding: var(--space-xs) var(--space-sm); font-size: var(--text-ui-size); border-radius: var(--radius-md); }
+  .btn[disabled] { background: var(--color-surface); color: var(--color-faint); cursor: not-allowed; transform: none; }
+  .btn-odds {
+    flex-direction: column; gap: 2px; min-width: 72px;
+    background: var(--color-surface); color: var(--color-ink);
+    border-radius: var(--radius-md); font-size: var(--text-ui-size);
+  }
+  .btn-odds small { color: var(--color-muted); font-size: var(--text-caption-size); }
+  .btn-odds[aria-pressed="true"] { background: var(--color-secondary); }
+  .btn-odds[aria-pressed="true"] small { color: rgba(255,255,255,.8); }
+
+  /* Badge & pill */
+  .badge { display: inline-flex; align-items: center; padding: 1px var(--space-sm); border-radius: var(--radius-full); font-size: var(--text-caption-size); background: var(--color-secondary); color: var(--color-on-primary); }
+  .badge-green { background: var(--color-primary); }
+  .pill { display: inline-flex; align-items: center; min-height: 32px; padding: 0 var(--space-md); border-radius: var(--radius-full); border: 1px solid var(--color-hairline); color: var(--color-ink); font-size: var(--text-ui-size); background: transparent; font-family: inherit; font-weight: 600; cursor: pointer; }
+  .pill[aria-selected="true"] { background: var(--color-ink); color: var(--color-canvas); border-color: var(--color-ink); }
+
+  /* ── Ô nhập ── */
+  .form-grid { display: grid; gap: var(--space-lg); grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+  .field { display: flex; flex-direction: column; gap: var(--space-xs); }
+  .field label { font-size: var(--text-ui-size); color: var(--color-muted); }
+  .field .hint { font-size: var(--text-caption-size); color: var(--color-faint); }
+  .input {
+    width: 100%; min-height: 40px; padding: var(--space-sm) var(--space-md);
+    background: var(--color-surface); color: var(--color-ink);
+    border: 1px solid var(--color-hairline); border-radius: var(--radius-md);
+    font: inherit; font-size: var(--text-body-size); font-weight: 600;
+    transition: border-color .15s, box-shadow .15s;
+  }
+  .input::placeholder { color: var(--color-faint); }
+  .input:hover { border-color: var(--color-faint); }
+  .input:focus { outline: none; border-color: var(--color-secondary); box-shadow: 0 0 0 3px rgba(0, 117, 255, .25); }
+  .input[aria-invalid="true"] { border-color: var(--color-danger); }
+  .field.error .hint { color: var(--color-danger); }
+  .input:disabled { color: var(--color-faint); cursor: not-allowed; opacity: .7; }
+  .input-search { position: relative; }
+  .input-search svg { position: absolute; left: var(--space-md); top: 50%; transform: translateY(-50%); color: var(--color-muted); pointer-events: none; }
+  .input-search .input { padding-left: 36px; border-radius: var(--radius-full); }
+  .input-group { display: flex; gap: var(--space-sm); }
+  .input-group .input { flex: 1; }
+  .check { display: flex; align-items: center; gap: var(--space-sm); font-size: var(--text-body-size); }
+  .check input { width: 18px; height: 18px; accent-color: var(--color-primary); }
+
+  /* ── Thẻ ── */
+  .cards { display: grid; gap: var(--space-lg); grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+  .card {
+    background: var(--color-surface); border: 1px solid var(--color-hairline);
+    border-radius: var(--radius-card); padding: var(--space-lg);
+    display: flex; flex-direction: column; gap: var(--space-sm);
+  }
+  .card h4 { margin: 0; font-size: var(--text-heading-size); font-weight: 800; line-height: var(--text-heading-line); }
+  .card p { margin: 0; color: var(--color-muted); }
+  .card .actions { margin-top: auto; padding-top: var(--space-sm); display: flex; gap: var(--space-sm); }
+  .card-floating { box-shadow: var(--shadow-floating); }
+  .card-hero {
+    grid-column: 1 / -1; min-height: 180px; padding: var(--space-xxl);
+    justify-content: center; position: relative; overflow: hidden;
+    background:
+      radial-gradient(circle at 85% 30%, rgba(0, 178, 75, .45), transparent 45%),
+      radial-gradient(circle at 70% 90%, rgba(0, 117, 255, .45), transparent 50%),
+      var(--color-surface);
+  }
+  .card-hero .big { font-size: var(--text-display-size); font-weight: 800; line-height: var(--text-display-line); margin: 0; }
+  .card-hero p { color: var(--color-ink); opacity: .8; max-width: 420px; }
+  .stat-list { display: grid; grid-template-columns: 1fr auto; gap: var(--space-xs) var(--space-md); font-size: var(--text-ui-size); }
+  .stat-list dt { color: var(--color-muted); }
+  .stat-list dd { margin: 0; text-align: right; }
+  .stat-list .total { padding-top: var(--space-sm); border-top: 1px solid var(--color-hairline); font-size: var(--text-title-size); color: var(--color-ink); }
+
+  /* Ô trò chơi: dải cuộn ngang */
+  .rail { display: flex; gap: var(--space-md); overflow-x: auto; padding-bottom: var(--space-sm); scroll-snap-type: x mandatory; }
+  .tile {
+    flex: 0 0 140px; aspect-ratio: 3 / 4; scroll-snap-align: start;
+    border-radius: var(--radius-card); background: var(--color-surface);
+    position: relative; overflow: hidden; display: flex; align-items: flex-end;
+    padding: var(--space-sm); font-size: var(--text-ui-size);
+  }
+  .tile .art { position: absolute; inset: 0; display: grid; place-items: center; font-size: 48px; }
+  .tile .label { position: relative; width: 100%; padding: var(--space-xs) var(--space-sm); border-radius: var(--radius-sm); background: rgba(20, 20, 21, .7); }
+  .tile .badge { position: absolute; top: var(--space-sm); left: var(--space-sm); }
+
+  @media (max-width: 640px) {
+    main { padding-inline: var(--space-lg); }
+    .type-row { grid-template-columns: 1fr; gap: var(--space-xs); }
+    .topbar nav { display: none; }
+    h1 { font-size: 28px; }
+  }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <strong>Đập Chuột · DS</strong>
+  <nav aria-label="Mục lục">
+    <a href="#mau">Màu</a><a href="#chu">Kiểu chữ</a><a href="#khoang-cach">Khoảng cách</a>
+    <a href="#bo-goc">Bo góc</a><a href="#nut">Nút bấm</a><a href="#o-nhap">Ô nhập</a><a href="#the">Thẻ</a>
+  </nav>
+</header>
+
+<main>
+  <section>
+    <p class="eyebrow">Design system</p>
+    <h1>Nền tối, hai màu tín hiệu</h1>
+    <p class="lead">Nền gần đen và bề mặt xám tối phẳng. Chữ Inter chỉ dùng độ đậm 600 và 800. Xanh lá cho hành động chính, xanh dương cho hành động phụ. Màu rực rỡ chỉ nằm trong nội dung (ô trò chơi, banner), khung giao diện giữ đơn sắc. Mọi giá trị lấy từ <code>tokens.css</code>.</p>
+  </section>
+
+  <!-- Màu -->
+  <section id="mau">
+    <h2>Bảng màu</h2>
+    <h3>Tín hiệu hành động</h3>
+    <div class="grid">
+      <div class="swatch"><div class="chip" style="background:var(--color-primary)"></div><div class="meta"><span class="name">Primary</span><span class="hex">#00B24B · --color-primary</span></div></div>
+      <div class="swatch"><div class="chip" style="background:var(--color-secondary)"></div><div class="meta"><span class="name">Secondary</span><span class="hex">#0075FF · --color-secondary</span></div></div>
+      <div class="swatch"><div class="chip" style="background:var(--color-on-primary)"></div><div class="meta"><span class="name">On primary</span><span class="hex">#FFFFFF · --color-on-primary</span></div></div>
+    </div>
+    <h3>Bề mặt</h3>
+    <div class="grid">
+      <div class="swatch"><div class="chip" style="background:var(--color-canvas)"></div><div class="meta"><span class="name">Canvas</span><span class="hex">#141415 · --color-canvas</span></div></div>
+      <div class="swatch"><div class="chip" style="background:var(--color-surface)"></div><div class="meta"><span class="name">Surface</span><span class="hex">#2E3035 · --color-surface</span></div></div>
+      <div class="swatch"><div class="chip" style="background:var(--color-hairline)"></div><div class="meta"><span class="name">Hairline</span><span class="hex">#2D2F33 · --color-hairline</span></div></div>
+      <div class="swatch"><div class="chip" style="background:var(--color-black)"></div><div class="meta"><span class="name">Black</span><span class="hex">#000000 · --color-black</span></div></div>
+    </div>
+    <h3>Chữ &amp; trạng thái</h3>
+    <div class="grid">
+      <div class="swatch"><div class="chip" style="background:var(--color-ink)"></div><div class="meta"><span class="name">Ink</span><span class="hex">#F0F2F5 · --color-ink</span></div></div>
+      <div class="swatch"><div class="chip" style="background:var(--color-muted)"></div><div class="meta"><span class="name">Muted</span><span class="hex">#9AA1B1 · --color-muted</span></div></div>
+      <div class="swatch"><div class="chip" style="background:var(--color-faint)"></div><div class="meta"><span class="name">Faint</span><span class="hex">#53575F · --color-faint</span></div></div>
+      <div class="swatch"><div class="chip" style="background:var(--color-danger)"></div><div class="meta"><span class="name">Danger</span><span class="hex">#FF4D5E · --color-danger</span></div></div>
+      <div class="swatch"><div class="chip" style="background:var(--color-warning)"></div><div class="meta"><span class="name">Warning</span><span class="hex">#FFB020 · --color-warning</span></div></div>
+    </div>
+  </section>
+
+  <!-- Kiểu chữ -->
+  <section id="chu">
+    <h2>Kiểu chữ</h2>
+    <p class="lead" style="margin-bottom:var(--space-lg)">Inter, chỉ hai độ đậm: 800 cho tiêu đề và con số lớn, 600 cho mọi chữ còn lại. Phân cấp bằng cỡ chữ và bước nhảy 600 → 800, không dùng chữ mảnh.</p>
+    <div class="type-row"><div class="spec">Display<br>33 / 800 / 1.1</div><div class="t-display">Đập trúng 42 con chuột</div></div>
+    <div class="type-row"><div class="spec">Heading<br>20 / 800 / 1.2</div><div class="t-heading">Bảng xếp hạng hôm nay</div></div>
+    <div class="type-row"><div class="spec">Title<br>16 / 600 / 1.3</div><div class="t-title">Chế độ 10 giây</div></div>
+    <div class="type-row"><div class="spec">Body<br>14 / 600 / 1.4</div><div class="t-body">Bấm vào chuột khi nó chui lên khỏi hang. Mỗi lần đập trúng được 1 điểm, bấm trượt không bị trừ.</div></div>
+    <div class="type-row"><div class="spec">UI<br>13 / 600 / 1.3</div><div class="t-ui">Còn 07 giây · 12 điểm</div></div>
+    <div class="type-row"><div class="spec">Caption<br>12 / 600 / 1.3</div><div class="t-caption">Cập nhật 2 phút trước</div></div>
+  </section>
+
+  <!-- Khoảng cách -->
+  <section id="khoang-cach">
+    <h2>Khoảng cách</h2>
+    <p class="lead" style="margin-bottom:var(--space-lg)">Đơn vị gốc 8px. Nút dùng 8 × 12px, thẻ dùng 16–24px.</p>
+    <div style="display:grid;gap:var(--space-sm)">
+      <div class="space-item"><span>xxs · 2px</span><div class="bar" style="width:var(--space-xxs)"></div></div>
+      <div class="space-item"><span>xs · 4px</span><div class="bar" style="width:var(--space-xs)"></div></div>
+      <div class="space-item"><span>sm · 8px</span><div class="bar" style="width:var(--space-sm)"></div></div>
+      <div class="space-item"><span>md · 12px</span><div class="bar" style="width:var(--space-md)"></div></div>
+      <div class="space-item"><span>lg · 16px</span><div class="bar" style="width:var(--space-lg)"></div></div>
+      <div class="space-item"><span>xl · 20px</span><div class="bar" style="width:var(--space-xl)"></div></div>
+      <div class="space-item"><span>xxl · 24px</span><div class="bar" style="width:var(--space-xxl)"></div></div>
+      <div class="space-item"><span>xxxl · 32px</span><div class="bar" style="width:var(--space-xxxl)"></div></div>
+    </div>
+  </section>
+
+  <!-- Bo góc -->
+  <section id="bo-goc">
+    <h2>Bo góc</h2>
+    <div class="row">
+      <div class="radius-box" style="border-radius:var(--radius-xs)">xs · 4</div>
+      <div class="radius-box" style="border-radius:var(--radius-sm)">sm · 6</div>
+      <div class="radius-box" style="border-radius:var(--radius-md)">md · 8</div>
+      <div class="radius-box" style="border-radius:var(--radius-lg)">lg · 10</div>
+      <div class="radius-box" style="border-radius:var(--radius-xl)">xl · 12</div>
+      <div class="radius-box" style="border-radius:var(--radius-card)">card · 16</div>
+      <div class="radius-box" style="border-radius:var(--radius-full)">full</div>
+    </div>
+  </section>
+
+  <!-- Nút bấm -->
+  <section id="nut">
+    <h2>Nút bấm</h2>
+    <h3>Biến thể</h3>
+    <div class="row">
+      <button class="btn btn-primary">Bắt đầu chơi</button>
+      <button class="btn btn-secondary">Xem hướng dẫn</button>
+      <button class="btn btn-tertiary">Thêm chế độ</button>
+      <button class="btn btn-ghost">Bỏ qua</button>
+      <button class="btn btn-primary" disabled>Đang tải…</button>
+    </div>
+    <h3>Kích thước</h3>
+    <div class="row">
+      <button class="btn btn-primary btn-lg">Chơi lại</button>
+      <button class="btn btn-primary">Chơi lại</button>
+      <button class="btn btn-primary btn-sm">Chơi lại</button>
+    </div>
+    <h3>Pill, badge &amp; nút chọn</h3>
+    <div class="row" role="tablist" aria-label="Chế độ chơi">
+      <button class="pill" role="tab" aria-selected="true">10 giây</button>
+      <button class="pill" role="tab" aria-selected="false">30 giây</button>
+      <button class="pill" role="tab" aria-selected="false">Vô tận</button>
+      <span class="badge">Mới</span>
+      <span class="badge badge-green">+1</span>
+    </div>
+    <div class="row" style="margin-top:var(--space-md)">
+      <button class="btn btn-odds" aria-pressed="false"><small>Dễ</small>0,8s</button>
+      <button class="btn btn-odds" aria-pressed="true"><small>Vừa</small>0,6s</button>
+      <button class="btn btn-odds" aria-pressed="false"><small>Khó</small>0,4s</button>
+    </div>
+  </section>
+
+  <!-- Ô nhập -->
+  <section id="o-nhap">
+    <h2>Ô nhập</h2>
+    <div class="form-grid">
+      <div class="field">
+        <label for="f-name">Tên người chơi</label>
+        <input id="f-name" class="input" placeholder="Nhập tên của bạn">
+        <span class="hint">Hiện trên bảng xếp hạng</span>
+      </div>
+      <div class="field">
+        <label for="f-search">Tìm kiếm</label>
+        <div class="input-search">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <input id="f-search" class="input" type="search" placeholder="Tìm người chơi">
+        </div>
+      </div>
+      <div class="field error">
+        <label for="f-err">Thời gian (giây)</label>
+        <input id="f-err" class="input" value="0" aria-invalid="true" aria-describedby="f-err-hint">
+        <span class="hint" id="f-err-hint">Thời gian phải lớn hơn 0</span>
+      </div>
+      <div class="field">
+        <label for="f-dis">Mã phòng</label>
+        <input id="f-dis" class="input" value="Chưa mở" disabled>
+      </div>
+      <div class="field">
+        <label for="f-group">Mời bạn chơi</label>
+        <div class="input-group">
+          <input id="f-group" class="input" placeholder="Tên bạn bè">
+          <button class="btn btn-secondary">Mời</button>
+        </div>
+      </div>
+      <div class="field">
+        <label for="f-level">Độ khó</label>
+        <select id="f-level" class="input"><option>Dễ</option><option selected>Vừa</option><option>Khó</option></select>
+      </div>
+    </div>
+    <div class="row" style="margin-top:var(--space-lg)">
+      <label class="check"><input type="checkbox" checked> Bật âm thanh</label>
+      <label class="check"><input type="checkbox"> Rung khi đập trúng</label>
+    </div>
+  </section>
+
+  <!-- Thẻ -->
+  <section id="the">
+    <h2>Thẻ</h2>
+    <div class="cards">
+      <div class="card card-hero">
+        <span class="badge badge-green" style="align-self:flex-start">Thử thách tuần</span>
+        <p class="big">Đạt 50 điểm trong 10 giây</p>
+        <p>Thẻ banner: nền bề mặt kèm gradient từ hai màu tín hiệu, chữ lớn 800.</p>
+        <div class="actions"><button class="btn btn-primary">Tham gia</button><button class="btn btn-tertiary">Luật chơi</button></div>
+      </div>
+
+      <div class="card">
+        <span class="badge" style="align-self:flex-start">Chế độ</span>
+        <h4>Cổ điển</h4>
+        <p>Lưới 3×3, mỗi lượt 10 giây. Chuột ở lại 0,8 giây rồi biến mất.</p>
+        <div class="actions"><button class="btn btn-primary">Chơi</button></div>
+      </div>
+
+      <div class="card">
+        <h4>Kết quả lượt chơi</h4>
+        <dl class="stat-list">
+          <dt>Đập trúng</dt><dd>18</dd>
+          <dt>Bấm trượt</dt><dd>5</dd>
+          <dt>Độ chính xác</dt><dd>78%</dd>
+          <dt class="total">Tổng điểm</dt><dd class="total">18</dd>
+        </dl>
+        <div class="actions"><button class="btn btn-primary">Chơi lại</button><button class="btn btn-ghost">Chia sẻ</button></div>
+      </div>
+
+      <div class="card card-floating">
+        <h4>Hết giờ!</h4>
+        <p>Thẻ nổi dùng cho hộp thoại, có bóng đổ mềm.</p>
+        <div class="actions"><button class="btn btn-primary">Chơi lại</button><button class="btn btn-tertiary">Về trang chính</button></div>
+      </div>
+    </div>
+
+    <h3>Ô trò chơi (dải cuộn ngang)</h3>
+    <div class="rail">
+      <div class="tile"><div class="art" style="background:linear-gradient(160deg,#6d28d9,#db2777)">🐭</div><span class="badge">Hot</span><span class="label">Cổ điển</span></div>
+      <div class="tile"><div class="art" style="background:linear-gradient(160deg,#f59e0b,#dc2626)">🔨</div><span class="label">Tốc độ</span></div>
+      <div class="tile"><div class="art" style="background:linear-gradient(160deg,#0891b2,#4f46e5)">⏱️</div><span class="badge badge-green">Mới</span><span class="label">10 giây</span></div>
+      <div class="tile"><div class="art" style="background:linear-gradient(160deg,#16a34a,#0d9488)">🧀</div><span class="label">Săn phô mai</span></div>
+      <div class="tile"><div class="art" style="background:linear-gradient(160deg,#be123c,#7c3aed)">🏆</div><span class="label">Đấu hạng</span></div>
+      <div class="tile"><div class="art" style="background:linear-gradient(160deg,#ca8a04,#65a30d)">🎯</div><span class="label">Chính xác</span></div>
+    </div>
+  </section>
+</main>
+</body>
+</html>
