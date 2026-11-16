@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Đập Chuột</title>
+<link rel="stylesheet" href="../design/tokens.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- F13: nút âm thanh hiện ở cả 3 màn hình -->
+  <button id="sound-toggle" class="sound-toggle" type="button" aria-pressed="true" aria-label="Tắt âm thanh và rung">🔊</button>
+
+  <!-- S1 · Bắt đầu -->
+  <section id="screen-start" class="screen" aria-labelledby="start-title">
+    <p class="best-corner">Kỷ lục: <b id="best-start">0</b></p>
+    <h1 id="start-title" class="game-title">🐭 Đập Chuột</h1>
+    <p class="hint">Bấm vào chuột để ghi điểm.<br>Bạn có 10 giây!</p>
+    <button id="btn-start" class="btn btn-primary btn-lg" type="button">Bắt đầu</button>
+  </section>
+
+  <!-- S2 · Chơi -->
+  <section id="screen-play" class="screen" aria-label="Đang chơi" hidden>
+    <div class="status-bar">
+      <span>Điểm: <b id="score">0</b></span>
+      <span id="timer-wrap">Thời gian: <b id="timer">10</b></span>
+    </div>
+    <div id="board" class="board" role="group" aria-label="Lưới 3×3"></div>
+  </section>
+
+  <!-- S3 · Kết thúc -->
+  <section id="screen-end" class="screen" aria-labelledby="end-title" hidden>
+    <h1 id="end-title" class="end-title">Hết giờ!</h1>
+    <p id="final-score" class="final-score">0</p>
+    <p id="new-best" class="badge badge-green" hidden>Kỷ lục mới!</p>
+    <p id="aborted-note" class="aborted-note" hidden>Lượt bị dừng vì bạn rời trang, điểm này không tính kỷ lục.</p>
+    <p class="best-line">Kỷ lục: <span id="best-end">0</span></p>
+    <div class="end-actions">
+      <button id="btn-replay" class="btn btn-primary btn-lg" type="button">Chơi lại</button>
+      <button id="btn-home" class="btn btn-tertiary btn-lg" type="button">Về trang đầu</button>
+    </div>
+  </section>
+
+  <script src="game.js"></script>
+</body>
+</html>
