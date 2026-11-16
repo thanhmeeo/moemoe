@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chức năng · Đập Chuột</title>
+<link rel="stylesheet" href="docs.css">
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="index.html">🐭 Đập Chuột</a>
+  <nav aria-label="Tài liệu">
+    <a href="index.html">Mục lục</a>
+    <a href="01-tong-quan.html">Tổng quan</a>
+    <a href="02-chuc-nang.html" aria-current="page">Chức năng</a>
+    <a href="03-man-hinh.html">Màn hình</a>
+    <a href="04-quy-tac-du-lieu.html">Quy tắc & dữ liệu</a>
+    <a href="05-ke-hoach-test.html">Kế hoạch test</a>
+  </nav>
+</header>
+<main>
+<p class="eyebrow">02 · Chức năng</p>
+<h1>Danh sách chức năng</h1>
+<p class="lead">Mỗi chức năng có mã F để tham chiếu trong màn hình và kế hoạch test.</p>
+
+<p><span class="badge green">Phải có</span> cần cho bản đầu tiên &nbsp; <span class="badge blue">Nên có</span> làm nếu còn thời gian</p>
+
+<h2>Vòng chơi</h2>
+<div class="table-wrap"><table>
+  <tr><th>Mã</th><th>Chức năng</th><th>Mô tả</th><th>Ưu tiên</th></tr>
+  <tr><td>F01</td><td>Bắt đầu lượt</td><td>Bấm "Bắt đầu" thì đặt điểm = 0, thời gian = 10, chuyển sang màn hình Chơi và bắt đầu đếm ngược.</td><td><span class="badge green">Phải có</span></td></tr>
+  <tr><td>F02</td><td>Đếm ngược</td><td>Hiển thị số giây còn lại, giảm từ 10 về 0, cập nhật mỗi giây. Tính theo thời gian thực, không trôi.</td><td><span class="badge green">Phải có</span></td></tr>
+  <tr><td>F03</td><td>Sinh chuột</td><td>Mỗi lúc tối đa 1 chuột, ở ô ngẫu nhiên khác ô liền trước; ở lại 0,8 giây; con mới sau 0,3 giây.</td><td><span class="badge green">Phải có</span></td></tr>
+  <tr><td>F04</td><td>Đập chuột</td><td>Bấm/chạm ô có chuột: +1 điểm, chuột biến mất ngay, có hiệu ứng.</td><td><span class="badge green">Phải có</span></td></tr>
+  <tr><td>F05</td><td>Bấm trượt</td><td>Bấm ô trống: không đổi điểm, không phát âm thanh đập trúng.</td><td><span class="badge green">Phải có</span></td></tr>
+  <tr><td>F06</td><td>Kết thúc lượt</td><td>Khi về 0: chuột biến mất, khóa lưới, chuyển sang màn hình Kết thúc.</td><td><span class="badge green">Phải có</span></td></tr>
+  <tr><td>F07</td><td>Chơi lại</td><td>Từ màn hình Kết thúc bắt đầu lượt mới ngay, không còn bộ đếm hay chuột từ lượt cũ.</td><td><span class="badge green">Phải có</span></td></tr>
+</table></div>
+
+<h2>Điểm &amp; lưu trữ</h2>
+<div class="table-wrap"><table>
+  <tr><th>Mã</th><th>Chức năng</th><th>Mô tả</th><th>Ưu tiên</th></tr>
+  <tr><td>F08</td><td>Hiển thị điểm</td><td>Điểm hiện tại luôn hiển thị trên màn hình Chơi, cập nhật ngay khi đập trúng.</td><td><span class="badge green">Phải có</span></td></tr>
+  <tr><td>F09</td><td>Điểm cao nhất</td><td>Lưu 1 con số kỷ lục trong localStorage; hiện ở màn hình Bắt đầu và Kết thúc.</td><td><span class="badge green">Phải có</span></td></tr>
+  <tr><td>F10</td><td>Kỷ lục mới</td><td>Nếu điểm lượt &gt; kỷ lục cũ: lưu lại và hiện "Kỷ lục mới!".</td><td><span class="badge green">Phải có</span></td></tr>
+</table></div>
+
+<h2>Âm thanh &amp; rung</h2>
+<div class="table-wrap"><table>
+  <tr><th>Mã</th><th>Chức năng</th><th>Mô tả</th><th>Ưu tiên</th></tr>
+  <tr><td>F11</td><td>Âm thanh</td><td>Tiếng "bốp" khi đập trúng, tiếng chuông khi hết giờ. Âm thanh ngắn, không có nhạc nền.</td><td><span class="badge green">Phải có</span></td></tr>
+  <tr><td>F12</td><td>Rung</td><td>Rung ngắn (~30 ms) khi đập trúng, chỉ trên thiết bị hỗ trợ (<code>navigator.vibrate</code>). Không hỗ trợ thì bỏ qua, không báo lỗi.</td><td><span class="badge green">Phải có</span></td></tr>
+  <tr><td>F13</td><td>Nút bật/tắt</td><td>Một nút 🔊/🔇 tắt cả âm thanh và rung; mặc định bật; nhớ lựa chọn trên máy.</td><td><span class="badge green">Phải có</span></td></tr>
+</table></div>
+
+<h2>Trải nghiệm chung</h2>
+<div class="table-wrap"><table>
+  <tr><th>Mã</th><th>Chức năng</th><th>Mô tả</th><th>Ưu tiên</th></tr>
+  <tr><td>F14</td><td>Chuột &amp; cảm ứng</td><td>Phản hồi ngay khi chạm (pointerdown), không chờ nhả tay; không zoom khi chạm nhanh 2 lần.</td><td><span class="badge green">Phải có</span></td></tr>
+  <tr><td>F15</td><td>Responsive</td><td>Vừa màn hình từ 360px, không cần cuộn khi chơi.</td><td><span class="badge green">Phải có</span></td></tr>
+  <tr><td>F16</td><td>Tạm dừng khi rời tab</td><td>Chuyển tab hoặc khóa màn hình giữa lượt thì kết thúc lượt luôn, không ghi kỷ lục ảo.</td><td><span class="badge blue">Nên có</span></td></tr>
+  <tr><td>F17</td><td>Bàn phím</td><td>Phím 1–9 tương ứng 9 ô (theo bố cục bàn phím số) cho người chơi máy tính.</td><td><span class="badge blue">Nên có</span></td></tr>
+</table></div>
+<div class="pager"><a href="01-tong-quan.html">← Tổng quan</a><a href="03-man-hinh.html">Màn hình →</a></div>
+</main>
+<footer>Tài liệu game Đập Chuột · Nguồn: YEU-CAU.md và phỏng vấn làm rõ ý tưởng · Chưa có code game</footer>
+</body>
+</html>

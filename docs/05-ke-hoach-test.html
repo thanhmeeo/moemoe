@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kế hoạch test · Đập Chuột</title>
+<link rel="stylesheet" href="docs.css">
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="index.html">🐭 Đập Chuột</a>
+  <nav aria-label="Tài liệu">
+    <a href="index.html">Mục lục</a>
+    <a href="01-tong-quan.html">Tổng quan</a>
+    <a href="02-chuc-nang.html">Chức năng</a>
+    <a href="03-man-hinh.html">Màn hình</a>
+    <a href="04-quy-tac-du-lieu.html">Quy tắc & dữ liệu</a>
+    <a href="05-ke-hoach-test.html" aria-current="page">Kế hoạch test</a>
+  </nav>
+</header>
+<main>
+<p class="eyebrow">05 · Kế hoạch test</p>
+<h1>Kế hoạch kiểm thử</h1>
+<p class="lead">Kiểm thử thủ công trên trình duyệt. Mỗi ca tham chiếu chức năng (F) hoặc luật (L, D) liên quan.</p>
+
+<h2>Môi trường</h2>
+<div class="table-wrap"><table>
+  <tr><th>Thiết bị</th><th>Trình duyệt</th><th>Ghi chú</th></tr>
+  <tr><td>Máy tính</td><td>Chrome, Safari, Firefox bản mới</td><td>Chơi bằng chuột</td></tr>
+  <tr><td>Android</td><td>Chrome</td><td>Kiểm tra rung</td></tr>
+  <tr><td>iPhone</td><td>Safari</td><td>Không hỗ trợ rung: không được lỗi</td></tr>
+</table></div>
+
+<h2>Ca kiểm thử</h2>
+<div class="table-wrap"><table>
+  <tr><th>Mã</th><th>Bước thực hiện</th><th>Kết quả mong đợi</th><th>Liên quan</th></tr>
+  <tr><td>T01</td><td>Mở trang lần đầu</td><td>Hiện màn hình Bắt đầu, kỷ lục = 0, âm thanh bật</td><td>F09, F13</td></tr>
+  <tr><td>T02</td><td>Bấm Bắt đầu, bấm giờ bằng đồng hồ ngoài</td><td>Đếm 10 → 0, hết lượt sau đúng ~10 giây</td><td>F01, F02, L2</td></tr>
+  <tr><td>T03</td><td>Quan sát lưới suốt một lượt, không bấm</td><td>Luôn tối đa 1 chuột; mỗi con ~0,8 giây; không lặp ô liền trước</td><td>F03, L3–L6</td></tr>
+  <tr><td>T04</td><td>Đập trúng 5 con chuột</td><td>Điểm = 5; mỗi lần có tiếng, rung (Android) và hiệu ứng</td><td>F04, D1, F11, F12</td></tr>
+  <tr><td>T05</td><td>Bấm liên tục vào ô trống và vào chuột vừa đập</td><td>Điểm không đổi, không có tiếng đập</td><td>F05, D2, D3</td></tr>
+  <tr><td>T06</td><td>Chơi hết lượt không bấm gì</td><td>Màn hình Kết thúc, điểm 0, không có "Kỷ lục mới!"</td><td>F06</td></tr>
+  <tr><td>T07</td><td>Bấm vào lưới ngay khi vừa hết giờ</td><td>Không cộng thêm điểm</td><td>L8</td></tr>
+  <tr><td>T08</td><td>Đạt điểm cao hơn kỷ lục</td><td>Hiện "Kỷ lục mới!", kỷ lục cập nhật ở cả S1 và S3</td><td>F10</td></tr>
+  <tr><td>T09</td><td>Đạt điểm thấp hơn kỷ lục</td><td>Không hiện "Kỷ lục mới!", kỷ lục giữ nguyên</td><td>F10</td></tr>
+  <tr><td>T10</td><td>Tải lại trang</td><td>Kỷ lục và lựa chọn âm thanh vẫn còn</td><td>F09, F13</td></tr>
+  <tr><td>T11</td><td>Bấm Chơi lại 3 lần liên tiếp</td><td>Mỗi lượt đúng 10 giây, điểm bắt đầu từ 0, đồng hồ không chạy nhanh dần</td><td>F07</td></tr>
+  <tr><td>T12</td><td>Tắt âm thanh rồi chơi</td><td>Không có tiếng, không rung; tải lại vẫn tắt</td><td>F13</td></tr>
+  <tr><td>T13</td><td>Chạm nhanh 2 lần trên điện thoại</td><td>Trang không zoom; cả hai lần chạm đều được xử lý</td><td>F14</td></tr>
+  <tr><td>T14</td><td>Mở trên màn hình rộng 360px</td><td>Thấy đủ thanh trạng thái và 9 ô, không cần cuộn</td><td>F15</td></tr>
+  <tr><td>T15</td><td>Mở ẩn danh / chặn lưu trữ</td><td>Game vẫn chơi được, không lỗi</td><td>F09</td></tr>
+  <tr><td>T16</td><td>Chuyển tab giữa lượt rồi quay lại</td><td>Lượt đã kết thúc, không cộng điểm ảo</td><td>F16</td></tr>
+</table></div>
+
+<h2>Tiêu chí hoàn thành</h2>
+<ul>
+  <li>Tất cả ca T01–T15 đạt trên Chrome máy tính và ít nhất một điện thoại.</li>
+  <li>Console không có lỗi khi chơi trọn một lượt.</li>
+  <li>Mọi chức năng <span class="badge green">Phải có</span> ở trang 02 đều được kiểm thử.</li>
+  <li>Màu, chữ, bo góc dùng token trong <code>design/tokens.css</code>, không có mã màu viết cứng.</li>
+</ul>
+
+<h2>Ghi kết quả</h2>
+<p>Với mỗi ca, ghi: <code>Đạt</code> / <code>Không đạt</code>, thiết bị, trình duyệt và mô tả lỗi (nếu có). Lỗi cần sửa trước khi coi là hoàn thành.</p>
+<div class="pager"><a href="04-quy-tac-du-lieu.html">← Quy tắc & dữ liệu</a><span></span></div>
+</main>
+<footer>Tài liệu game Đập Chuột · Nguồn: YEU-CAU.md và phỏng vấn làm rõ ý tưởng · Chưa có code game</footer>
+</body>
+</html>

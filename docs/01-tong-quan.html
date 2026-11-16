@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tổng quan · Đập Chuột</title>
+<link rel="stylesheet" href="docs.css">
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="index.html">🐭 Đập Chuột</a>
+  <nav aria-label="Tài liệu">
+    <a href="index.html">Mục lục</a>
+    <a href="01-tong-quan.html" aria-current="page">Tổng quan</a>
+    <a href="02-chuc-nang.html">Chức năng</a>
+    <a href="03-man-hinh.html">Màn hình</a>
+    <a href="04-quy-tac-du-lieu.html">Quy tắc & dữ liệu</a>
+    <a href="05-ke-hoach-test.html">Kế hoạch test</a>
+  </nav>
+</header>
+<main>
+<p class="eyebrow">01 · Tổng quan</p>
+<h1>Tổng quan dự án</h1>
+<p class="lead">Một game phản xạ ngắn gọn để giải trí nhanh: mở trang, chơi 10 giây, xem điểm, chơi lại.</p>
+
+<h2>Mục tiêu</h2>
+<ul>
+  <li>Người chơi hiểu cách chơi trong vòng 5 giây đầu, không cần đọc hướng dẫn dài.</li>
+  <li>Một lượt trọn vẹn (bắt đầu → kết thúc → chơi lại) không quá 15 giây.</li>
+  <li>Tạo động lực chơi lại bằng điểm cao nhất và thông báo "Kỷ lục mới!".</li>
+</ul>
+
+<h2>Người chơi</h2>
+<div class="cards">
+  <div class="card"><h3>Ai</h3><p>Người lớn muốn giải trí nhanh lúc rảnh: chờ xe, nghỉ giải lao, giữa hai việc.</p></div>
+  <div class="card"><h3>Thiết bị</h3><p>Điện thoại (chạm) là chính, máy tính (chuột) cũng phải chơi tốt.</p></div>
+  <div class="card"><h3>Kỳ vọng</h3><p>Vào là chơi ngay, không đăng nhập, không cài đặt, không quảng cáo.</p></div>
+</div>
+
+<h2>Quyết định đã chốt</h2>
+<p class="muted">Tổng hợp từ YEU-CAU.md và buổi phỏng vấn làm rõ ý tưởng.</p>
+<div class="table-wrap"><table>
+  <tr><th>#</th><th>Câu hỏi</th><th>Quyết định</th></tr>
+  <tr><td>Q1</td><td>Game dành cho ai?</td><td>Giải trí nhanh cho người lớn</td></tr>
+  <tr><td>Q2</td><td>Độ khó trong lượt?</td><td>Cố định, chuột ở lại 0,8 giây suốt lượt</td></tr>
+  <tr><td>Q3</td><td>Lưu điểm thế nào?</td><td>Chỉ 1 con số điểm cao nhất trên máy, không nhập tên</td></tr>
+  <tr><td>Q4</td><td>Âm thanh, hiệu ứng?</td><td>Âm thanh + rung trên điện thoại, có nút bật/tắt</td></tr>
+  <tr><td>—</td><td>Thời gian lượt</td><td>10 giây (theo YEU-CAU.md)</td></tr>
+</table></div>
+
+<h2>Phạm vi</h2>
+<h3>Trong phạm vi</h3>
+<ul>
+  <li>3 màn hình: Bắt đầu, Chơi, Kết thúc.</li>
+  <li>Lưới 3×3, một chuột tại một thời điểm, tính điểm, đếm ngược 10 giây.</li>
+  <li>Điểm cao nhất lưu trên máy; âm thanh và rung có nút tắt.</li>
+  <li>Chạy trên trình duyệt hiện đại, mở file là chơi, không cần server.</li>
+</ul>
+<h3>Ngoài phạm vi</h3>
+<ul>
+  <li>Nhiều mức độ khó, chuột tăng tốc, chuột đặc biệt, combo, điểm âm.</li>
+  <li>Bảng xếp hạng nhiều người, nhập tên, đăng nhập, lưu trên server.</li>
+  <li>Nhạc nền, quảng cáo, thanh toán.</li>
+</ul>
+
+<h2>Thuật ngữ</h2>
+<div class="table-wrap"><table>
+  <tr><th>Từ</th><th>Nghĩa</th></tr>
+  <tr><td>Lượt</td><td>Một lần chơi 10 giây, từ lúc bấm Bắt đầu / Chơi lại đến khi hết giờ</td></tr>
+  <tr><td>Ô / hang</td><td>Một trong 9 vị trí trên lưới, nơi chuột có thể xuất hiện</td></tr>
+  <tr><td>Đập trúng</td><td>Bấm vào ô đang có chuột</td></tr>
+  <tr><td>Bấm trượt</td><td>Bấm vào ô không có chuột</td></tr>
+  <tr><td>Kỷ lục</td><td>Điểm cao nhất từng đạt trên trình duyệt này</td></tr>
+</table></div>
+<div class="pager"><a href="index.html">← Mục lục</a><a href="02-chuc-nang.html">Chức năng →</a></div>
+</main>
+<footer>Tài liệu game Đập Chuột · Nguồn: YEU-CAU.md và phỏng vấn làm rõ ý tưởng · Chưa có code game</footer>
+</body>
+</html>

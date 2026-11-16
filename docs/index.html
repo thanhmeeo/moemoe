@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mục lục · Đập Chuột</title>
+<link rel="stylesheet" href="docs.css">
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="index.html">🐭 Đập Chuột</a>
+  <nav aria-label="Tài liệu">
+    <a href="index.html" aria-current="page">Mục lục</a>
+    <a href="01-tong-quan.html">Tổng quan</a>
+    <a href="02-chuc-nang.html">Chức năng</a>
+    <a href="03-man-hinh.html">Màn hình</a>
+    <a href="04-quy-tac-du-lieu.html">Quy tắc & dữ liệu</a>
+    <a href="05-ke-hoach-test.html">Kế hoạch test</a>
+  </nav>
+</header>
+<main>
+<p class="eyebrow">Tài liệu dự án</p>
+<h1>Game Đập Chuột</h1>
+<p class="lead">Mini game trên trình duyệt: lưới 3×3, mỗi lượt 10 giây, bấm trúng chuột được 1 điểm. Bộ tài liệu này mô tả đầy đủ để bắt đầu viết code.</p>
+
+<div class="cards">
+  <a class="card" href="01-tong-quan.html"><span class="num">01</span><h3>Tổng quan</h3><p>Mục tiêu, người chơi, phạm vi và các quyết định đã chốt.</p></a>
+  <a class="card" href="02-chuc-nang.html"><span class="num">02</span><h3>Chức năng</h3><p>Danh sách chức năng có mã F, kèm mức ưu tiên.</p></a>
+  <a class="card" href="03-man-hinh.html"><span class="num">03</span><h3>Màn hình</h3><p>3 màn hình, thành phần, trạng thái và luồng chuyển.</p></a>
+  <a class="card" href="04-quy-tac-du-lieu.html"><span class="num">04</span><h3>Quy tắc &amp; dữ liệu</h3><p>Luật chơi, tính điểm, thông số thời gian, dữ liệu lưu trữ.</p></a>
+  <a class="card" href="05-ke-hoach-test.html"><span class="num">05</span><h3>Kế hoạch test</h3><p>Ca kiểm thử thủ công và tiêu chí hoàn thành.</p></a>
+</div>
+
+<h2>Tóm tắt nhanh</h2>
+<div class="table-wrap"><table>
+  <tr><th>Mục</th><th>Giá trị</th></tr>
+  <tr><td>Nền tảng</td><td>Trình duyệt web, điện thoại và máy tính</td></tr>
+  <tr><td>Bảng chơi</td><td>Lưới 3×3 = 9 ô</td></tr>
+  <tr><td>Thời gian lượt</td><td>10 giây</td></tr>
+  <tr><td>Độ khó</td><td>Cố định: chuột ở lại 0,8 giây, cách nhau 0,3 giây</td></tr>
+  <tr><td>Điểm</td><td>+1 mỗi lần đập trúng; không trừ điểm</td></tr>
+  <tr><td>Lưu trữ</td><td>Chỉ điểm cao nhất, trên máy (localStorage)</td></tr>
+  <tr><td>Phản hồi</td><td>Âm thanh + rung (nếu thiết bị hỗ trợ), có nút tắt</td></tr>
+  <tr><td>Giao diện</td><td>Theo <code>design/tokens.css</code>: nền tối, xanh lá cho hành động chính</td></tr>
+</table></div>
+<div class="pager"><span></span><a href="01-tong-quan.html">Tổng quan →</a></div>
+</main>
+<footer>Tài liệu game Đập Chuột · Nguồn: YEU-CAU.md và phỏng vấn làm rõ ý tưởng · Chưa có code game</footer>
+</body>
+</html>

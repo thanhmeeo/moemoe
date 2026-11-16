@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quy tắc & dữ liệu · Đập Chuột</title>
+<link rel="stylesheet" href="docs.css">
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="index.html">🐭 Đập Chuột</a>
+  <nav aria-label="Tài liệu">
+    <a href="index.html">Mục lục</a>
+    <a href="01-tong-quan.html">Tổng quan</a>
+    <a href="02-chuc-nang.html">Chức năng</a>
+    <a href="03-man-hinh.html">Màn hình</a>
+    <a href="04-quy-tac-du-lieu.html" aria-current="page">Quy tắc & dữ liệu</a>
+    <a href="05-ke-hoach-test.html">Kế hoạch test</a>
+  </nav>
+</header>
+<main>
+<p class="eyebrow">04 · Quy tắc &amp; dữ liệu</p>
+<h1>Quy tắc và dữ liệu</h1>
+<p class="lead">Các luật có mã L, D để code và test tham chiếu chính xác.</p>
+
+<h2>Luật chơi</h2>
+<div class="table-wrap"><table>
+  <tr><th>#</th><th>Luật</th></tr>
+  <tr><td>L1</td><td>Bảng chơi là lưới 3×3 = 9 ô, đánh số 0–8 từ trái sang phải, trên xuống dưới.</td></tr>
+  <tr><td>L2</td><td>Mỗi lượt kéo dài đúng 10 giây, tính từ lúc bấm Bắt đầu / Chơi lại.</td></tr>
+  <tr><td>L3</td><td>Tại mỗi thời điểm có tối đa 1 con chuột trên bảng.</td></tr>
+  <tr><td>L4</td><td>Chuột ở lại 0,8 giây rồi biến mất nếu không bị đập.</td></tr>
+  <tr><td>L5</td><td>Chuột mới xuất hiện sau 0,3 giây kể từ khi chuột cũ biến mất hoặc bị đập. Chuột đầu tiên xuất hiện sau 0,3 giây kể từ lúc bắt đầu.</td></tr>
+  <tr><td>L6</td><td>Ô của chuột mới được chọn ngẫu nhiên đều trong 8 ô còn lại (khác ô liền trước).</td></tr>
+  <tr><td>L7</td><td>Độ khó cố định suốt lượt: L4 và L5 không đổi.</td></tr>
+  <tr><td>L8</td><td>Hết giờ: chuột đang hiện biến mất, mọi thao tác bấm trên lưới bị bỏ qua.</td></tr>
+</table></div>
+
+<h2>Tính điểm</h2>
+<div class="table-wrap"><table>
+  <tr><th>#</th><th>Hành động</th><th>Điểm</th><th>Âm thanh / rung</th></tr>
+  <tr><td>D1</td><td>Bấm trúng ô đang có chuột</td><td><b>+1</b></td><td>Tiếng "bốp" + rung 30 ms</td></tr>
+  <tr><td>D2</td><td>Bấm ô trống</td><td>0</td><td>Không</td></tr>
+  <tr><td>D3</td><td>Bấm lại chuột vừa bị đập</td><td>0</td><td>Không</td></tr>
+  <tr><td>D4</td><td>Chuột tự biến mất</td><td>0</td><td>Không</td></tr>
+  <tr><td>D5</td><td>Hết giờ</td><td>—</td><td>Tiếng chuông kết thúc</td></tr>
+</table></div>
+<div class="note">Điểm tối đa lý thuyết trong 10 giây ≈ 10 ÷ (0,3 + thời gian phản xạ). Người chơi rất nhanh đạt khoảng 20–25 điểm.</div>
+
+<h2>Thông số</h2>
+<div class="table-wrap"><table>
+  <tr><th>Tên</th><th>Giá trị</th><th>Ý nghĩa</th></tr>
+  <tr><td><code>ROUND_MS</code></td><td>10000</td><td>Thời gian một lượt</td></tr>
+  <tr><td><code>MOLE_UP_MS</code></td><td>800</td><td>Thời gian chuột ở lại</td></tr>
+  <tr><td><code>MOLE_GAP_MS</code></td><td>300</td><td>Khoảng nghỉ giữa hai chuột</td></tr>
+  <tr><td><code>HIT_FLASH_MS</code></td><td>150</td><td>Hiệu ứng nháy khi đập trúng</td></tr>
+  <tr><td><code>VIBRATE_MS</code></td><td>30</td><td>Thời gian rung khi đập trúng</td></tr>
+  <tr><td><code>WARN_AT_S</code></td><td>3</td><td>Số giây cuối đổi màu cảnh báo</td></tr>
+</table></div>
+
+<h2>Trạng thái trong một lượt</h2>
+<div class="table-wrap"><table>
+  <tr><th>Biến</th><th>Kiểu</th><th>Mô tả</th></tr>
+  <tr><td><code>screen</code></td><td>"start" | "play" | "end"</td><td>Màn hình đang hiện</td></tr>
+  <tr><td><code>score</code></td><td>số nguyên ≥ 0</td><td>Điểm lượt hiện tại</td></tr>
+  <tr><td><code>endsAt</code></td><td>mốc thời gian (ms)</td><td>Thời điểm hết lượt; giây còn lại = ⌈(endsAt − now) ÷ 1000⌉</td></tr>
+  <tr><td><code>moleCell</code></td><td>0–8 hoặc null</td><td>Ô đang có chuột</td></tr>
+  <tr><td><code>lastCell</code></td><td>0–8 hoặc null</td><td>Ô của chuột liền trước (cho L6)</td></tr>
+</table></div>
+
+<h2>Dữ liệu lưu trên máy</h2>
+<p>Lưu bằng <code>localStorage</code>, chỉ trong trình duyệt của người chơi, không gửi đi đâu.</p>
+<div class="table-wrap"><table>
+  <tr><th>Khóa</th><th>Giá trị</th><th>Mặc định</th><th>Khi nào ghi</th></tr>
+  <tr><td><code>dapchuot.best</code></td><td>Số nguyên ≥ 0</td><td>0</td><td>Kết thúc lượt, nếu điểm &gt; giá trị cũ</td></tr>
+  <tr><td><code>dapchuot.sound</code></td><td>"on" | "off"</td><td>"on"</td><td>Bấm nút 🔊/🔇</td></tr>
+</table></div>
+<div class="note warn">localStorage có thể bị chặn (chế độ ẩn danh, chặn cookie). Khi đó game vẫn chơi bình thường, kỷ lục chỉ tồn tại tới khi đóng trang. Đọc giá trị lỗi hoặc không phải số thì coi là mặc định.</div>
+<div class="pager"><a href="03-man-hinh.html">← Màn hình</a><a href="05-ke-hoach-test.html">Kế hoạch test →</a></div>
+</main>
+<footer>Tài liệu game Đập Chuột · Nguồn: YEU-CAU.md và phỏng vấn làm rõ ý tưởng · Chưa có code game</footer>
+</body>
+</html>

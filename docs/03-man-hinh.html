@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Màn hình · Đập Chuột</title>
+<link rel="stylesheet" href="docs.css">
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="index.html">🐭 Đập Chuột</a>
+  <nav aria-label="Tài liệu">
+    <a href="index.html">Mục lục</a>
+    <a href="01-tong-quan.html">Tổng quan</a>
+    <a href="02-chuc-nang.html">Chức năng</a>
+    <a href="03-man-hinh.html" aria-current="page">Màn hình</a>
+    <a href="04-quy-tac-du-lieu.html">Quy tắc & dữ liệu</a>
+    <a href="05-ke-hoach-test.html">Kế hoạch test</a>
+  </nav>
+</header>
+<main>
+<p class="eyebrow">03 · Màn hình</p>
+<h1>Màn hình &amp; luồng</h1>
+<p class="lead">Game có 3 màn hình trên cùng một trang. Phác thảo dưới đây dùng đúng màu và bo góc của design system.</p>
+
+<h2>Luồng chuyển màn hình</h2>
+<div class="table-wrap"><table>
+  <tr><th>Từ</th><th>Sự kiện</th><th>Đến</th></tr>
+  <tr><td>Mở trang</td><td>Tải xong</td><td>S1 · Bắt đầu</td></tr>
+  <tr><td>S1 · Bắt đầu</td><td>Bấm "Bắt đầu"</td><td>S2 · Chơi</td></tr>
+  <tr><td>S2 · Chơi</td><td>Hết 10 giây (hoặc rời tab, F16)</td><td>S3 · Kết thúc</td></tr>
+  <tr><td>S3 · Kết thúc</td><td>Bấm "Chơi lại"</td><td>S2 · Chơi (lượt mới)</td></tr>
+  <tr><td>S3 · Kết thúc</td><td>Bấm "Về trang đầu"</td><td>S1 · Bắt đầu</td></tr>
+</table></div>
+
+<h2>S1 · Màn hình bắt đầu</h2>
+<div class="mock">
+  <div class="bar"><span>🔊</span><span>Kỷ lục: <b>18</b></span></div>
+  <p class="title">🐭 Đập Chuột</p>
+  <p class="muted">Bấm vào chuột để ghi điểm.<br>Bạn có 10 giây!</p>
+  <span class="btn">Bắt đầu</span>
+</div>
+<ul>
+  <li>Tên game, một dòng hướng dẫn, nút <b>Bắt đầu</b> màu xanh lá (nút chính).</li>
+  <li>Kỷ lục hiện góc trên; chưa chơi lần nào thì hiện <code>0</code>.</li>
+  <li>Nút 🔊/🔇 góc trên trái (F13).</li>
+</ul>
+
+<h2>S2 · Màn hình chơi</h2>
+<div class="mock">
+  <div class="bar"><span>Điểm: <b>7</b></span><span>Thời gian: <b>06</b></span></div>
+  <div class="grid">
+    <div class="cell"></div><div class="cell"></div><div class="cell"></div>
+    <div class="cell"></div><div class="cell">🐭</div><div class="cell"></div>
+    <div class="cell"></div><div class="cell"></div><div class="cell"></div>
+  </div>
+</div>
+<ul>
+  <li>Thanh trạng thái: <code>Điểm</code> bên trái, <code>Thời gian</code> bên phải, cỡ chữ title, đậm.</li>
+  <li>Lưới 3×3 chiếm phần lớn màn hình, ô vuông bo góc 10px, nền <code>--color-surface</code>, mỗi ô tối thiểu 64px.</li>
+  <li>Ô có chuột hiện 🐭; đập trúng thì ô nháy xanh lá ngắn (~150 ms) rồi trống.</li>
+  <li>3 giây cuối: số giây đổi sang màu <code>--color-warning</code>.</li>
+</ul>
+
+<h2>S3 · Màn hình kết thúc</h2>
+<div class="mock">
+  <p class="title">Hết giờ!</p>
+  <p class="big">21</p>
+  <p><span class="badge green">Kỷ lục mới!</span></p>
+  <p class="muted">Kỷ lục: 21</p>
+  <span class="btn">Chơi lại</span>
+  <span class="btn alt">Về trang đầu</span>
+</div>
+<ul>
+  <li>Điểm lượt vừa chơi hiển thị lớn (cỡ display, xanh lá).</li>
+  <li>Badge "Kỷ lục mới!" chỉ hiện khi phá kỷ lục.</li>
+  <li><b>Chơi lại</b> là nút chính (xanh lá); <b>Về trang đầu</b> là nút phụ (xám).</li>
+</ul>
+
+<h2>Quy ước giao diện</h2>
+<div class="table-wrap"><table>
+  <tr><th>Thành phần</th><th>Token</th></tr>
+  <tr><td>Nền trang</td><td><code>--color-canvas</code></td></tr>
+  <tr><td>Ô lưới, nút phụ</td><td><code>--color-surface</code>, <code>--radius-lg</code></td></tr>
+  <tr><td>Nút chính</td><td><code>--color-primary</code>, <code>--radius-lg</code>, chữ 600</td></tr>
+  <tr><td>Điểm lớn, tiêu đề</td><td><code>--text-display-*</code>, độ đậm 800</td></tr>
+  <tr><td>Khoảng cách lưới</td><td><code>--space-sm</code> (8px)</td></tr>
+</table></div>
+<div class="pager"><a href="02-chuc-nang.html">← Chức năng</a><a href="04-quy-tac-du-lieu.html">Quy tắc & dữ liệu →</a></div>
+</main>
+<footer>Tài liệu game Đập Chuột · Nguồn: YEU-CAU.md và phỏng vấn làm rõ ý tưởng · Chưa có code game</footer>
+</body>
+</html>
