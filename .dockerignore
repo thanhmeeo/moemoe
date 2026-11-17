@@ -1,0 +1,20 @@
+# Image chỉ cần package.json, server.js, app/, app-poodle/, design/, docs/
+.git
+.gitignore
+.dockerignore
+.nojekyll
+Dockerfile
+compose.yaml
+docker-compose*.yml
+README.md
+YEU-CAU.md
+index.html
+node_modules
+npm-debug.log*
+*.log
+.env
+.env.*
+.DS_Store
+Thumbs.db
+.vscode
+.idea
