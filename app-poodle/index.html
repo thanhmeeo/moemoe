@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Đập Chuột · Poodle Bão tuyết</title>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ===== Phông nền: trời cực quang, tuyết rơi, núi băng, sân tuyết ===== -->
+<div class="canh" aria-hidden="true">
+  <div class="bau-troi"></div>
+  <div id="tuyet" class="tuyet"></div>
+  <svg class="nui" viewBox="0 0 800 200" preserveAspectRatio="none">
+    <polygon class="nui-xa"  points="0,120 90,70 170,95 290,40 380,85 470,55 560,90 650,45 740,80 800,60 800,200 0,200"/>
+    <polygon class="dinh"    points="270,52 290,40 312,52 300,56 290,50 280,56"/>
+    <polygon class="dinh"    points="635,55 650,45 668,56 655,58 648,53 642,58"/>
+    <polygon class="nui-gan" points="0,150 120,105 230,140 360,95 470,130 600,100 720,135 800,115 800,200 0,200"/>
+    <polygon class="dinh"    points="345,104 360,95 378,106 365,108 358,103 352,108"/>
+  </svg>
+  <div class="san-tuyet"></div>
+</div>
+
+<div class="khung-game">
+
+  <!-- Nút góc trên phải -->
+  <div class="nut-goc">
+    <button id="btnTamDung" class="nut-kinh" type="button" aria-label="Tạm dừng" title="Tạm dừng (P)" hidden>⏸</button>
+    <button id="btnAmThanh" class="nut-kinh" type="button" aria-pressed="false" aria-label="Bật âm thanh" title="Bật/tắt âm thanh">🔇</button>
+  </div>
+
+  <!-- ===== 1. MÀN HÌNH BẮT ĐẦU ===== -->
+  <section id="manBatDau" class="man man-giua" aria-labelledby="tieuDe">
+    <div class="bang-kinh">
+      <span class="eyebrow">Mini game · 30 giây</span>
+      <h1 id="tieuDe" class="tieu-de">Đập Chuột</h1>
+      <p class="mo-ta">Đập trúng chuột trong 30 giây, mỗi con được 1 điểm.</p>
+
+      <div class="hang-the hai">
+        <div class="the-kinh"><div class="nhan">Kỷ lục</div><div class="so" id="bdKyLuc">—</div></div>
+        <div class="the-kinh"><div class="nhan">Combo max</div><div class="so" id="bdComboKyLuc">—</div></div>
+      </div>
+
+      <button id="btnBatDau" class="btn btn-primary btn-lg rong" type="button">Bắt đầu</button>
+
+      <ul class="goi-y">
+        <li>Trượt không bị trừ điểm</li>
+        <li>Chuột nhanh dần theo thời gian</li>
+        <li>Trúng liên tiếp để lên combo</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ===== 2. MÀN HÌNH CHƠI ===== -->
+  <section id="manChoi" class="man man-choi" hidden aria-label="Đang chơi">
+    <div class="hud">
+      <div class="hang-the bon">
+        <div class="the-kinh"><div class="nhan">Điểm</div><div class="so" id="choiDiem">0</div></div>
+        <div class="the-kinh"><div class="nhan">Còn</div><div class="so" id="choiThoiGian">30</div></div>
+        <div class="the-kinh" id="theCombo"><div class="nhan">Combo</div><div class="so" id="choiCombo">0</div></div>
+        <div class="the-kinh" id="theKyLuc"><div class="nhan">Kỷ lục</div><div class="so" id="choiKyLuc">—</div></div>
+      </div>
+
+      <div class="tien-trinh" aria-hidden="true"><div id="thanhTienTrinh" class="tien-trinh-day"></div></div>
+      <div class="ten-chang" aria-hidden="true">
+        <span data-chang="0" class="dang">Khởi động</span>
+        <span data-chang="1">Tăng tốc</span>
+        <span data-chang="2">❄ Bão tuyết</span>
+      </div>
+      <div class="hang-nhan" aria-live="off">
+        <span id="nhanChang" class="badge accent" hidden>Tăng tốc!</span>
+      </div>
+    </div>
+
+    <div class="san">
+      <div id="bang" class="bang" role="group" aria-label="Lưới 3×3"></div>
+      <div id="lopPhu" class="lop-phu" hidden>
+        <span id="lopPhuChu" class="lop-phu-chu">3</span>
+        <button id="btnTiepTuc" class="btn btn-primary btn-lg" type="button" hidden>Tiếp tục</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 3. MÀN HÌNH KẾT QUẢ ===== -->
+  <section id="manKetQua" class="man man-giua" hidden aria-labelledby="kqTieuDe">
+    <div class="bang-kinh">
+      <h1 id="kqTieuDe" class="tieu-de">Hết giờ!</h1>
+      <div class="diem-lon" id="kqDiem">0</div>
+      <div class="hang-nhan giua">
+        <span id="kqKyLucMoi" class="badge accent" hidden>Kỷ lục mới!</span>
+        <span id="kqComboKyLuc" class="badge combo" hidden>Combo kỷ lục!</span>
+      </div>
+
+      <div class="hang-the hai">
+        <div class="the-kinh"><div class="nhan">Chuột</div><div class="so" id="kqSoChuot">0</div></div>
+        <div class="the-kinh"><div class="nhan">Trúng</div><div class="so" id="kqTrung">0</div></div>
+        <div class="the-kinh"><div class="nhan">Trượt</div><div class="so" id="kqTruot">0</div></div>
+        <div class="the-kinh"><div class="nhan">Tỉ lệ</div><div class="so" id="kqTiLe">—</div></div>
+      </div>
+      <div class="the-kinh dong-combo">
+        Combo dài nhất: <strong id="kqCombo">0</strong>
+        <span class="mo">(KL: <span id="kqComboKL">—</span>)</span>
+      </div>
+
+      <button id="btnChoiLai" class="btn btn-primary btn-lg rong" type="button">Chơi lại</button>
+      <button id="btnVeChinh" class="btn btn-ghost rong" type="button">Về màn hình chính</button>
+    </div>
+  </section>
+
+</div>
+
+<!-- Bảng gỡ lỗi: bật bằng phím D hoặc thêm ?debug=1 vào đường dẫn -->
+<pre id="goLoi" class="go-loi" hidden></pre>
+
+<!-- Vùng đọc cho trình đọc màn hình (cập nhật mỗi 5 giây khi chơi) -->
+<div id="vungDoc" class="sr-only" aria-live="polite"></div>
+
+<!-- Mẫu nhân vật (chó poodle hoạt hình, vẽ bằng SVG) — được nhân bản vào từng ô -->
+<template id="mauNhanVat">
+  <svg class="nhan-vat" viewBox="0 0 100 120" aria-hidden="true">
+    <!-- thân xù -->
+    <g fill="#e7b07a">
+      <circle cx="50" cy="104" r="30"/>
+      <circle cx="26" cy="96" r="12"/><circle cx="74" cy="96" r="12"/>
+      <circle cx="34" cy="84" r="11"/><circle cx="66" cy="84" r="11"/>
+    </g>
+    <g fill="#f3cfa2" opacity=".75">
+      <circle cx="50" cy="92" r="14"/><circle cx="42" cy="100" r="9"/><circle cx="58" cy="100" r="9"/>
+    </g>
+    <!-- tai xoăn -->
+    <g fill="#d6955a">
+      <circle cx="20" cy="50" r="10"/><circle cx="16" cy="62" r="10"/><circle cx="22" cy="73" r="9"/>
+      <circle cx="80" cy="50" r="10"/><circle cx="84" cy="62" r="10"/><circle cx="78" cy="73" r="9"/>
+    </g>
+    <!-- đầu -->
+    <circle cx="50" cy="54" r="26" fill="#e7b07a"/>
+    <!-- búi lông trên đầu -->
+    <g fill="#efc28f">
+      <circle cx="50" cy="26" r="13"/><circle cx="37" cy="31" r="10"/><circle cx="63" cy="31" r="10"/>
+      <circle cx="44" cy="20" r="8"/><circle cx="56" cy="20" r="8"/>
+    </g>
+    <!-- nơ hồng -->
+    <g fill="#f472b6">
+      <path d="M50 14 L40 8 Q37 14 40 20 Z"/>
+      <path d="M50 14 L60 8 Q63 14 60 20 Z"/>
+      <circle cx="50" cy="14" r="3.4" fill="#ec4899"/>
+    </g>
+    <!-- mõm -->
+    <ellipse cx="50" cy="68" rx="14" ry="11" fill="#f7dcb8"/>
+    <ellipse cx="50" cy="62" rx="5.2" ry="3.8" fill="#2b1a12"/>
+    <ellipse cx="48.4" cy="61" rx="1.6" ry="1" fill="#fff" opacity=".6"/>
+    <path d="M50 66 V70 M44 70 Q47 74 50 70 Q53 74 56 70" stroke="#2b1a12" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+    <path d="M47.5 72.5 Q50 79 52.5 72.5 Z" fill="#fb7185"/>
+    <!-- mắt -->
+    <g class="mat-thuong">
+      <circle cx="40" cy="50" r="4.6" fill="#111827"/>
+      <circle cx="60" cy="50" r="4.6" fill="#111827"/>
+      <circle cx="41.6" cy="48.4" r="1.6" fill="#fff"/>
+      <circle cx="61.6" cy="48.4" r="1.6" fill="#fff"/>
+    </g>
+    <g class="mat-choang" stroke="#111827" stroke-width="2.6" stroke-linecap="round">
+      <path d="M36 46 l8 8 M44 46 l-8 8"/>
+      <path d="M56 46 l8 8 M64 46 l-8 8"/>
+    </g>
+    <ellipse cx="32" cy="60" rx="5" ry="3" fill="#f9a8c4" opacity=".75"/>
+    <ellipse cx="68" cy="60" rx="5" ry="3" fill="#f9a8c4" opacity=".75"/>
+    <!-- sao choáng -->
+    <g class="sao" fill="#facc15">
+      <path d="M12 6 l2 5 5 .5 -4 3 1.5 5 -4.5 -3 -4.5 3 1.5 -5 -4 -3 5 -.5z"/>
+      <path d="M88 4 l1.6 4 4 .4 -3 2.4 1 4 -3.6 -2.4 -3.6 2.4 1 -4 -3 -2.4 4 -.4z"/>
+    </g>
+  </svg>
+</template>
+
+<script src="game.js"></script>
+</body>
+</html>
