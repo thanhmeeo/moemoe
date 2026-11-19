@@ -2,12 +2,13 @@
 
 Mini game phản xạ chạy trên trình duyệt: lưới 3×3, mỗi lượt 30 giây, đập trúng được 1 điểm.
 
-Repo có hai bản game:
+Repo có ba bản game:
 
 | Bản | Thư mục | Chơi online |
 |---|---|---|
 | Game gốc | `app/` | — |
 | Poodle Bão tuyết | `app-poodle/` | https://thanhmeeo.github.io/moemoe/app-poodle/ |
+| Đập Noel · Giáng sinh (Martin +3, Xuka +1, Mina −2) | `app-noel/` | https://thanhmeeo.github.io/moemoe/app-noel/ |
 
 ## Cấu trúc
 

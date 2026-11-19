@@ -9,6 +9,7 @@ WORKDIR /srv
 COPY package.json server.js ./
 COPY app ./app
 COPY app-poodle ./app-poodle
+COPY app-noel ./app-noel
 COPY design ./design
 COPY docs ./docs
 

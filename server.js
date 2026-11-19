@@ -12,7 +12,7 @@ const path = require('node:path');
 const PORT = Number(process.env.PORT) || 3000;
 const HOST = process.env.HOST || '0.0.0.0';
 const GOC = __dirname;
-const THU_MUC_CHO_PHEP = new Set(['app', 'app-poodle', 'design', 'docs']);
+const THU_MUC_CHO_PHEP = new Set(['app', 'app-poodle', 'app-noel', 'design', 'docs']);
 const TRANG_CHU = '/app/';
 
 const KIEU = {
