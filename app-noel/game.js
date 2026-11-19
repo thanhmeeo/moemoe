@@ -1,5 +1,5 @@
 /* =====================================================================
-   Đập Noel — logic game
+   Pushing · Christmas Wonderland — game logic
    Theo docs/02-chuc-nang.html và docs/04-quy-tac-du-lieu.html.
    Thời gian chạy theo "đồng hồ game": chỉ tiến khi đang chơi và không
    tạm dừng; mọi sự kiện (chuột hiện, lặn, nghỉ) tính theo đồng hồ này.
@@ -12,20 +12,25 @@ const DEM_NGUOC_CHUAN_BI = 3;      // 3-2-1
 const MOI_SO_DEM_NGUOC = 600;      // ms cho mỗi số
 // Tên chặng chỉ để hiển thị; tốc độ tăng liên tục theo hàm tocDo() bên dưới
 const CHANG = [
-  { ten: 'Khởi động' },
-  { ten: 'Tăng tốc!' },
-  { ten: 'Siêu tốc!' },
+  { ten: 'Warm-up' },
+  { ten: 'Faster!' },
+  { ten: 'Blizzard!' },
 ];
 
-// 3 nhân vật: điểm khi bị đập, tỉ lệ xuất hiện, hệ số thời gian hiện
+// 3 nhân vật: điểm khi bị đập, tỉ lệ xuất hiện (đầu → cuối lượt), hệ số thời gian hiện
+//  - Martin: hiếm và chạy rất nhanh (+3)
+//  - Xuka: phổ biến (+1)
+//  - Mina: nán lại lâu hơn để "dụ" người chơi; về cuối xuất hiện nhiều hơn (−2)
 const NHAN_VAT = {
-  martin: { ten: 'Martin', diem: 3,  tiLe: 0.22, heSoHien: 0.85 },  // hiếm, nhanh, +3
-  xuka:   { ten: 'Xuka',   diem: 1,  tiLe: 0.50, heSoHien: 1.0 },   // phổ biến, +1
-  mina:   { ten: 'Mina',   diem: -2, tiLe: 0.28, heSoHien: 1.1 },   // đừng đập: −2
+  martin: { ten: 'Martin', diem: 3,  tiLe: [0.20, 0.16], heSoHien: 0.72 },
+  xuka:   { ten: 'Xuka',   diem: 1,  tiLe: [0.58, 0.44], heSoHien: 1.0 },
+  mina:   { ten: 'Mina',   diem: -2, tiLe: [0.22, 0.40], heSoHien: 1.3 },
 };
-// Tốc độ: chuột hiện từ 1150 ms giảm dần còn 480 ms, khoảng nghỉ cũng ngắn dần
-const HIEN_DAU = 1150, HIEN_CUOI = 480;
-const NGHI_DAU = [450, 650], NGHI_CUOI = [130, 240];
+// Tốc độ (v2, nhanh hơn): thời gian hiện 950 ms → 380 ms, khoảng nghỉ cũng ngắn dần
+const HIEN_DAU = 950, HIEN_CUOI = 380;
+const NGHI_DAU = [320, 460], NGHI_CUOI = [70, 150];
+// "Dồn dập": sau giây 12, 30% lần nhân vật tiếp theo bật lên gần như ngay lập tức
+const DON_DAP_TU = 12_000, DON_DAP_TI_LE = 0.3, DON_DAP_NGHI = [40, 90];
 const DO_DAI_CHANG = 10_000;       // ms
 const COMBO_HIEN_TU = 3;
 const GIAY_CANH_BAO = 5;
@@ -147,7 +152,7 @@ const AM = {
 function capNhatNutLoa() {
   el.btnAmThanh.textContent = luu.amThanh ? '🔊' : '🔇';
   el.btnAmThanh.setAttribute('aria-pressed', String(luu.amThanh));
-  el.btnAmThanh.setAttribute('aria-label', luu.amThanh ? 'Tắt âm thanh' : 'Bật âm thanh');
+  el.btnAmThanh.setAttribute('aria-label', luu.amThanh ? 'Turn sound off' : 'Turn sound on');
 }
 
 /* ---------- Tuyết rơi ---------- */
@@ -163,10 +168,9 @@ for (let i = 0; i < SO_BONG_TUYET; i++) {
 
 /* ---------- Ảnh nhân vật trong bảng luật (màn hình bắt đầu) ---------- */
 document.querySelectorAll('[data-anh]').forEach((o) => {
-  const svg = el.mauNhanVat.content.querySelector('.nv-' + o.dataset.anh).cloneNode(true);
-  svg.setAttribute('class', 'anh-nv');
-  svg.setAttribute('viewBox', '20 8 60 76');   // chỉ lấy phần đầu & mặt
-  o.appendChild(svg);
+  const anh = el.mauNhanVat.content.querySelector('.nv-' + o.dataset.anh).cloneNode(true);
+  anh.className = 'anh-nv';
+  o.appendChild(anh);
 });
 
 /* ---------- Bảng 3×3 ---------- */
@@ -175,11 +179,14 @@ for (let i = 0; i < 9; i++) {
   const nut = document.createElement('button');
   nut.type = 'button';
   nut.className = 'o';
-  nut.setAttribute('aria-label', `Ô ${i + 1}`);
+  nut.setAttribute('aria-label', `Hole ${i + 1}`);
   const ho = document.createElement('span'); ho.className = 'ho';
   const matNa = document.createElement('span'); matNa.className = 'mat-na';
-  matNa.appendChild(el.mauNhanVat.content.cloneNode(true));
-  nut.append(ho, matNa);
+  const mau = el.mauNhanVat.content.cloneNode(true);
+  const tia = mau.querySelector('.tia-sao');
+  matNa.appendChild(mau);
+  const vanh = document.createElement('span'); vanh.className = 'vanh';   // viền gỗ phủ tuyết phía trước
+  nut.append(ho, matNa, vanh, tia);
   // Chuột/cảm ứng: xử lý ngay khi nhấn xuống cho nhạy
   nut.addEventListener('pointerdown', (e) => { if (e.button === 0) bamO(i); });
   // Bàn phím (Enter/Space) sinh click với detail = 0
@@ -189,7 +196,7 @@ for (let i = 0; i < 9; i++) {
 }
 function datNhanO(i) {
   const c = g.chuot;
-  o[i].setAttribute('aria-label', c && c.o === i && !c.biDap ? `Ô ${i + 1}, có ${NHAN_VAT[c.loai].ten}` : `Ô ${i + 1}`);
+  o[i].setAttribute('aria-label', c && c.o === i && !c.biDap ? `Hole ${i + 1}, ${NHAN_VAT[c.loai].ten}` : `Hole ${i + 1}`);
 }
 function donBang() {
   o.forEach((nut, i) => { nut.classList.remove('co-chuot', 'bi-dap', 'rung', 'dap-nham'); delete nut.dataset.loai; datNhanO(i); });
@@ -258,11 +265,11 @@ function datTamDung(dung) {
   g.tamDung = dung;
   g.lanCuoi = performance.now();
   khoaBang(dung);
-  el.lopPhuChu.textContent = 'Tạm dừng';
+  el.lopPhuChu.textContent = 'Paused';
   el.btnTiepTuc.hidden = !dung;
   el.lopPhu.hidden = !dung;
   el.btnTamDung.textContent = dung ? '▶' : '⏸';
-  el.btnTamDung.setAttribute('aria-label', dung ? 'Tiếp tục' : 'Tạm dừng');
+  el.btnTamDung.setAttribute('aria-label', dung ? 'Resume' : 'Pause');
   if (dung) el.btnTiepTuc.focus();
 }
 
@@ -279,9 +286,16 @@ function tocDo(t) {
   };
 }
 function chonNhanVat() {
-  let r = Math.random();
-  for (const [loai, nv] of Object.entries(NHAN_VAT)) { if ((r -= nv.tiLe) < 0) return loai; }
+  const k = Math.min(1, Math.max(0, g.t / THOI_GIAN_LUOT));
+  const ds = Object.entries(NHAN_VAT).map(([loai, nv]) => [loai, lerp(nv.tiLe[0], nv.tiLe[1], k)]);
+  let r = Math.random() * ds.reduce((tong, [, w]) => tong + w, 0);
+  for (const [loai, w] of ds) { if ((r -= w) < 0) return loai; }
   return 'xuka';
+}
+/** Khoảng nghỉ trước nhân vật tiếp theo (có lúc dồn dập về cuối lượt) */
+function khoangNghi(t) {
+  if (t >= DON_DAP_TU && Math.random() < DON_DAP_TI_LE) return ngauNhien(DON_DAP_NGHI);
+  return ngauNhien(tocDo(t).nghi);
 }
 
 let fps = 0, demKhung = 0, mocFps = 0;
@@ -315,7 +329,7 @@ function nhip(now) {
     o[ch.o].classList.remove('bi-dap', 'dap-nham');
     g.chuot = null;
     datNhanO(ch.o);
-    g.sinhLuc = g.t + ngauNhien(tocDo(g.t).nghi);
+    g.sinhLuc = g.t + khoangNghi(g.t);
   } else if (!ch && g.sinhLuc !== null && g.t >= g.sinhLuc) {
     sinhChuot();
   }
@@ -326,7 +340,7 @@ function nhip(now) {
   const moc = Math.floor(g.t / 1000 / DOC_MOI);
   if (moc > g.lanDocCuoi) {
     g.lanDocCuoi = moc;
-    el.vungDoc.textContent = `Điểm ${g.diem}, còn ${Math.ceil((THOI_GIAN_LUOT - g.t) / 1000)} giây`;
+    el.vungDoc.textContent = `Score ${g.diem}, ${Math.ceil((THOI_GIAN_LUOT - g.t) / 1000)} seconds left`;
   }
   veGoLoi();
 }
@@ -358,7 +372,7 @@ function chuotChayThoat() {
   o[c.o].classList.remove('co-chuot');
   g.chuot = null;
   datNhanO(c.o);
-  g.sinhLuc = g.t + ngauNhien(tocDo(g.t).nghi);
+  g.sinhLuc = g.t + khoangNghi(g.t);
 }
 
 /* ---------- CN-04 / CN-05: Đập, điểm, combo ---------- */
@@ -449,7 +463,7 @@ function hetGio() {
   el.nhanChang.hidden = true;
   el.btnTamDung.disabled = true;
   el.btnTiepTuc.hidden = true;
-  el.lopPhuChu.textContent = 'Hết giờ!';
+  el.lopPhuChu.textContent = "Time's up!";
   el.lopPhu.hidden = false;
   AM.hetGio();
   veGoLoi();
@@ -482,7 +496,7 @@ function hienKetQua() {
   el.kqComboKL.textContent = hienSo(luu.comboKyLuc);
 
   hienMan('ketQua');
-  el.vungDoc.textContent = `Hết giờ. Bạn được ${g.diem} điểm.`;
+  el.vungDoc.textContent = `Time's up. You scored ${g.diem} points.`;
   el.btnChoiLai.focus();
   veGoLoi();
 }
@@ -496,13 +510,13 @@ function veGoLoi() {
   const tenTT = { cho: 'idle', chuanBi: 'countdown', dangChoi: g.tamDung ? 'paused' : 'playing', hetGio: 'timeup', ketQua: 'result' }[g.trangThai];
   const ch = changTai(Math.min(g.t, THOI_GIAN_LUOT - 1));
   el.goLoi.textContent =
-    `trạng thái: ${tenTT}\n` +
-    `đã chơi:    ${(g.t / 1000).toFixed(2)}s\n` +
-    `giai đoạn:  ${ch + 1} · ${CHANG[ch].ten.replace('!', '')}\n` +
-    `trên sân:   ${c ? `${NHAN_VAT[c.loai].ten} ô${c.o + 1} (${c.biDap ? 'choáng' : ((c.hienDen - g.t) / 1000).toFixed(2) + 's'})` : '—'}\n` +
-    `tốc độ:     hiện ${Math.round(tocDo(g.t).hien)}ms\n` +
-    `ô vừa xong: ${g.oTruoc < 0 ? '—' : g.oTruoc + 1}\n` +
-    `điểm/combo: ${g.diem} / ${g.combo}\n` +
+    `state:      ${tenTT}\n` +
+    `played:     ${(g.t / 1000).toFixed(2)}s\n` +
+    `phase:      ${ch + 1} · ${CHANG[ch].ten.replace('!', '')}\n` +
+    `on board:   ${c ? `${NHAN_VAT[c.loai].ten} hole ${c.o + 1} (${c.biDap ? 'hit' : ((c.hienDen - g.t) / 1000).toFixed(2) + 's'})` : '—'}\n` +
+    `speed:      up ${Math.round(tocDo(g.t).hien)}ms\n` +
+    `last hole:  ${g.oTruoc < 0 ? '—' : g.oTruoc + 1}\n` +
+    `score/combo:${g.diem} / ${g.combo}\n` +
     `FPS:        ${fps}`;
 }
 
