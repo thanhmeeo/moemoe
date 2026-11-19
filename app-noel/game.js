@@ -12,9 +12,9 @@ const DEM_NGUOC_CHUAN_BI = 3;      // 3-2-1
 const MOI_SO_DEM_NGUOC = 600;      // ms cho mỗi số
 // Tên chặng chỉ để hiển thị; tốc độ tăng liên tục theo hàm tocDo() bên dưới
 const CHANG = [
-  { ten: 'Warm-up' },
-  { ten: 'Faster!' },
-  { ten: 'Blizzard!' },
+  { ten: 'Vibing' },
+  { ten: 'Locked in fr! 🔒' },
+  { ten: 'UNHINGED MODE ❄' },
 ];
 
 // 3 nhân vật: điểm khi bị đập, tỉ lệ xuất hiện (đầu → cuối lượt), hệ số thời gian hiện
@@ -63,6 +63,7 @@ const el = {
   kqSoChuot: $('kqSoChuot'), kqTrung: $('kqTrung'), kqTruot: $('kqTruot'), kqTiLe: $('kqTiLe'),
   kqCombo: $('kqCombo'), kqComboKL: $('kqComboKL'),
   vungDoc: $('vungDoc'), goLoi: $('goLoi'), tuyet: $('tuyet'),
+  kqScript: $('kqScript'), kqTieuDe: $('kqTieuDe'), kqDanhHieu: $('kqDanhHieu'), nhayDo: $('nhayDo'),
   mauNhanVat: $('mauNhanVat'),
 };
 
@@ -237,9 +238,9 @@ function batDauLuot() {
 
   el.btnTiepTuc.hidden = true;
   el.lopPhu.hidden = false;
-  el.lopPhuChu.textContent = String(DEM_NGUOC_CHUAN_BI);
+  datChuLopPhu(String(DEM_NGUOC_CHUAN_BI), true);
   for (let k = 1; k < DEM_NGUOC_CHUAN_BI; k++) {
-    hen(() => { el.lopPhuChu.textContent = String(DEM_NGUOC_CHUAN_BI - k); }, k * MOI_SO_DEM_NGUOC);
+    hen(() => { datChuLopPhu(String(DEM_NGUOC_CHUAN_BI - k), true); }, k * MOI_SO_DEM_NGUOC);
   }
   hen(batDauChoi, DEM_NGUOC_CHUAN_BI * MOI_SO_DEM_NGUOC);
   veGoLoi();
@@ -265,7 +266,7 @@ function datTamDung(dung) {
   g.tamDung = dung;
   g.lanCuoi = performance.now();
   khoaBang(dung);
-  el.lopPhuChu.textContent = 'Paused';
+  datChuLopPhu('Paused. touch grass? 🌱');
   el.btnTiepTuc.hidden = !dung;
   el.lopPhu.hidden = !dung;
   el.btnTamDung.textContent = dung ? '▶' : '⏸';
@@ -398,6 +399,7 @@ function bamO(i) {
     }
     capNhatDiem(true);
     capNhatCombo(diem > 0);
+    hieuUngDap(i, c.loai, diem);
 
     o[i].classList.remove('co-chuot');
     o[i].classList.add('bi-dap');
@@ -405,10 +407,10 @@ function bamO(i) {
     datNhanO(i);
     const cong = document.createElement('span');
     cong.className = 'cong-diem' + (diem < 0 ? ' am' : diem >= 3 ? ' lon' : '');
-    cong.textContent = (diem > 0 ? '+' : '−') + Math.abs(diem);
+    cong.textContent = `${chon(CHU_DAP[c.loai])} ${diem > 0 ? '+' : '−'}${Math.abs(diem)}`;
     cong.setAttribute('aria-hidden', 'true');
     o[i].appendChild(cong);
-    setTimeout(() => cong.remove(), 600);
+    setTimeout(() => cong.remove(), 750);
     return;
   }
 
@@ -419,6 +421,8 @@ function bamO(i) {
   o[i].classList.remove('rung');
   void o[i].offsetWidth;
   o[i].classList.add('rung');
+  const r = o[i].getBoundingClientRect();
+  HU.no(r.left + r.width / 2, r.top + r.height * 0.75, { tuyet: 8, sao: 0, giay: 0, luc: 0.6 });
 }
 
 /* ---------- Cập nhật giao diện ---------- */
@@ -463,7 +467,8 @@ function hetGio() {
   el.nhanChang.hidden = true;
   el.btnTamDung.disabled = true;
   el.btnTiepTuc.hidden = true;
-  el.lopPhuChu.textContent = "Time's up!";
+  datChuLopPhu("THAT'S A WRAP! 🎬", true);
+  HU.phaoHoa();
   el.lopPhu.hidden = false;
   AM.hetGio();
   veGoLoi();
@@ -486,7 +491,12 @@ function hienKetQua() {
   }
 
   el.kqDiem.textContent = String(g.diem);
+  const dh = danhHieu(g.diem, g.dapNham);
+  el.kqScript.textContent = dh.script;
+  el.kqTieuDe.textContent = dh.tieuDe;
+  el.kqDanhHieu.textContent = dh.dong;
   el.kqKyLucMoi.hidden = !kyLucMoi;
+  if (kyLucMoi) setTimeout(() => HU.mua(140), 150);
   el.kqComboKyLuc.hidden = !comboMoi;
   el.kqSoChuot.textContent = String(g.dem.martin);
   el.kqTrung.textContent = String(g.dem.xuka);
@@ -519,6 +529,161 @@ function veGoLoi() {
     `score/combo:${g.diem} / ${g.combo}\n` +
     `FPS:        ${fps}`;
 }
+
+/* =====================================================================
+   Gen Z copy + hiệu ứng hạt (tuyết, lấp lánh, giấy màu, than) — vẽ trên 1 canvas
+   ===================================================================== */
+const chon = (ds) => ds[Math.floor(Math.random() * ds.length)];
+const CHU_DAP = {
+  martin: ['BONK!', 'BONKED', 'MAIN CHAR', 'SHEESH'],
+  xuka:   ['boop!', 'snoot booped', 'good boy', 'pspsps'],
+  mina:   ['NAUGHTY!', 'COAL 🪨', 'caught 📝', 'NOT HER'],
+};
+const HO_COMBO = {
+  5: 'x5 · ATE THAT 💅', 10: 'x10 · SLAYYY 🔥', 15: 'x15 · UNREAL 😮‍💨', 20: "x20 · SANTA'S FAVE 🎅",
+};
+function datChuLopPhu(chu, nay) {
+  el.lopPhuChu.textContent = chu;
+  if (nay) { el.lopPhuChu.classList.remove('dem'); void el.lopPhuChu.offsetWidth; el.lopPhuChu.classList.add('dem'); }
+}
+function hoTo(chu) {
+  const n = document.createElement('div');
+  n.className = 'hu-het';
+  n.textContent = chu;
+  n.setAttribute('aria-hidden', 'true');
+  el.bang.parentElement.appendChild(n);
+  setTimeout(() => n.remove(), 1150);
+}
+function danhHieu(diem, nham) {
+  let r;
+  if (diem >= 45) r = { script: 'Purrr', tieuDe: "SANTA'S FAVE 🎅", dong: "It's giving main character. No crumbs left 💅" };
+  else if (diem >= 30) r = { script: 'Slay', tieuDe: 'ELF-TIER SLAY ✨', dong: 'Ate that. The North Pole is shook.' };
+  else if (diem >= 18) r = { script: 'Not bad', tieuDe: 'MID BUT MERRY 🎄', dong: 'Solid vibes, bestie. Run it back for the PB.' };
+  else if (diem >= 8) r = { script: 'Hmm', tieuDe: 'LOWKEY LOCKED IN', dong: 'The vibes were there. The aim? Debatable.' };
+  else r = { script: 'Santa saw that', tieuDe: 'COAL ERA 🪨', dong: 'Respectfully… run it back.' };
+  if (nham >= 3) r.dong = `You touched Mina ${nham} times. Naughty list speedrun any% 📝`;
+  return r;
+}
+
+function hieuUngDap(i, loai, diem) {
+  const r = o[i].getBoundingClientRect();
+  const x = r.left + r.width / 2, y = r.top + r.height * 0.42;
+  if (loai === 'martin') {
+    HU.no(x, y, { tuyet: 30, sao: 26, giay: 18, luc: 1.35 });
+  } else if (loai === 'xuka') {
+    HU.no(x, y, { tuyet: 26, sao: 10, giay: 6, luc: 1 });
+  } else {
+    HU.no(x, y, { tuyet: 10, sao: 0, giay: 0, than: 18, luc: 1.1 });
+    document.body.classList.remove('rung-man'); void document.body.offsetWidth; document.body.classList.add('rung-man');
+    el.nhayDo.classList.remove('bat'); void el.nhayDo.offsetWidth; el.nhayDo.classList.add('bat');
+  }
+  if (diem > 0 && g.combo >= 5 && g.combo % 5 === 0) {
+    hoTo(HO_COMBO[g.combo] || `x${g.combo} · ICONIC 👑`);
+    HU.mua(70);
+  }
+}
+
+const HU = (() => {
+  const cv = $('hieuUng');
+  const ctx = cv.getContext('2d');
+  const giam = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const MAU_GIAY = ['#d9b56d', '#f0d595', '#d0323d', '#f9f2e8', '#1f6b4f', '#ffffff'];
+  let ds = [], chay = 0, tr = 0, W = 0, H = 0;
+  function coGian() {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    W = innerWidth; H = innerHeight;
+    cv.width = W * dpr; cv.height = H * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  coGian();
+  addEventListener('resize', coGian);
+  const nn = (a, b) => a + Math.random() * (b - a);
+  function them(x, y, kieu, luc, tuTren) {
+    const goc = tuTren ? nn(Math.PI * 0.35, Math.PI * 0.65) : nn(-Math.PI * 0.95, -Math.PI * 0.05);
+    const v = tuTren ? nn(1, 3) : nn(3, 9) * luc;
+    ds.push({
+      x, y, vx: Math.cos(goc) * v * (tuTren ? 0.4 : 1), vy: Math.sin(goc) * v,
+      g: kieu === 'giay' ? 0.12 : kieu === 'than' ? 0.32 : 0.16,
+      keo: kieu === 'giay' ? 0.985 : 0.975,
+      song: 0, tho: tuTren ? nn(2.4, 3.6) : nn(0.7, 1.4),
+      r: kieu === 'sao' ? nn(4, 8) : kieu === 'giay' ? nn(4, 8) : kieu === 'than' ? nn(3, 6) : nn(4, 9),
+      quay: nn(0, Math.PI * 2), vq: nn(-0.25, 0.25), kieu,
+      mau: kieu === 'giay' ? MAU_GIAY[Math.floor(Math.random() * MAU_GIAY.length)] : kieu === 'sao' ? (Math.random() < 0.6 ? '#f0d595' : '#ffffff') : kieu === 'than' ? (Math.random() < 0.7 ? '#1c1414' : '#d0323d') : (Math.random() < 0.5 ? '#ffffff' : '#bfe3f5'),
+    });
+  }
+  function batDau() { if (!chay) { tr = performance.now(); chay = requestAnimationFrame(ve); } }
+  function veTuyet(p) {
+    // viền bóng đỏ đậm để bông tuyết vẫn nổi trên sàn tuyết trắng
+    ctx.shadowColor = 'rgba(94,15,23,.7)'; ctx.shadowBlur = 4;
+    ctx.strokeStyle = p.mau; ctx.lineWidth = 2; ctx.lineCap = 'round';
+    ctx.beginPath();
+    for (let k = 0; k < 6; k++) {
+      const a = p.quay + k * Math.PI / 3;
+      ctx.moveTo(p.x, p.y); ctx.lineTo(p.x + Math.cos(a) * p.r, p.y + Math.sin(a) * p.r);
+    }
+    ctx.stroke();
+    ctx.fillStyle = p.mau; ctx.beginPath(); ctx.arc(p.x, p.y, p.r * 0.32, 0, Math.PI * 2); ctx.fill();
+    ctx.shadowBlur = 0;
+  }
+  function veSao(p) {
+    const r = p.r, r2 = r * 0.28;
+    ctx.fillStyle = p.mau; ctx.shadowColor = p.mau; ctx.shadowBlur = 8;
+    ctx.beginPath();
+    for (let k = 0; k < 8; k++) {
+      const a = p.quay + k * Math.PI / 4, rr = k % 2 ? r2 : r;
+      ctx.lineTo(p.x + Math.cos(a) * rr, p.y + Math.sin(a) * rr);
+    }
+    ctx.closePath(); ctx.fill(); ctx.shadowBlur = 0;
+  }
+  function ve(now) {
+    const dt = Math.min(0.05, (now - tr) / 1000); tr = now;
+    ctx.clearRect(0, 0, W, H);
+    ds = ds.filter((p) => (p.song += dt) < p.tho && p.y < H + 40);
+    for (const p of ds) {
+      p.vx *= p.keo; p.vy = p.vy * p.keo + p.g * dt * 60;
+      p.x += p.vx * dt * 60; p.y += p.vy * dt * 60; p.quay += p.vq;
+      ctx.globalAlpha = Math.max(0, 1 - (p.song / p.tho) ** 2);
+      if (p.kieu === 'tuyet') veTuyet(p);
+      else if (p.kieu === 'sao') veSao(p);
+      else if (p.kieu === 'giay') {
+        ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.quay);
+        ctx.fillStyle = p.mau; ctx.fillRect(-p.r / 2, -p.r / 4 * (1 + Math.sin(p.song * 12)), p.r, p.r / 2 * (1 + Math.sin(p.song * 12)) + 1);
+        ctx.restore();
+      } else { ctx.fillStyle = p.mau; ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill(); }
+    }
+    ctx.globalAlpha = 1;
+    chay = ds.length ? requestAnimationFrame(ve) : 0;
+    if (!ds.length) ctx.clearRect(0, 0, W, H);
+  }
+  return {
+    /** Nổ hạt tại (x, y) */
+    no(x, y, { tuyet = 20, sao = 8, giay = 0, than = 0, luc = 1 } = {}) {
+      const k = giam ? 0.25 : 1;
+      for (let n = 0; n < tuyet * k; n++) them(x, y, 'tuyet', luc);
+      for (let n = 0; n < sao * k; n++) them(x, y, 'sao', luc * 1.1);
+      for (let n = 0; n < giay * k; n++) them(x, y, 'giay', luc);
+      for (let n = 0; n < than * k; n++) them(x, y, 'than', luc * 0.9);
+      batDau();
+    },
+    /** Mưa giấy màu từ mép trên */
+    mua(n = 80) {
+      if (giam) return;
+      for (let k = 0; k < n; k++) them(nn(0, W), nn(-80, -10), Math.random() < 0.8 ? 'giay' : 'sao', 1, true);
+      batDau();
+    },
+    /** Pháo giấy hai bên khi hết giờ */
+    phaoHoa() {
+      if (giam) return;
+      for (const [x, huong] of [[0, 1], [W, -1]]) {
+        for (let k = 0; k < 45; k++) {
+          ds.push({ x, y: H * 0.75, vx: huong * nn(4, 11), vy: -nn(8, 15), g: 0.22, keo: 0.985, song: 0, tho: nn(1.4, 2.4), r: nn(4, 8),
+            quay: nn(0, 6), vq: nn(-0.3, 0.3), kieu: Math.random() < 0.75 ? 'giay' : 'sao', mau: MAU_GIAY[k % MAU_GIAY.length] });
+        }
+      }
+      batDau();
+    },
+  };
+})();
 
 /* ---------- Sự kiện ---------- */
 el.btnBatDau.addEventListener('click', batDauLuot);
