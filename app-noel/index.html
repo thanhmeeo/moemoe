@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Đập Noel · Giáng sinh vui vẻ</title>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ===== Phông nền: trời cực quang, tuyết rơi, núi băng, sân tuyết ===== -->
+<div class="canh" aria-hidden="true">
+  <div class="bau-troi"></div>
+  <div id="tuyet" class="tuyet"></div>
+  <ul class="day-den"><li style="--i:0"></li><li style="--i:1"></li><li style="--i:2"></li><li style="--i:3"></li><li style="--i:4"></li><li style="--i:5"></li><li style="--i:6"></li><li style="--i:7"></li><li style="--i:8"></li><li style="--i:9"></li><li style="--i:10"></li><li style="--i:11"></li><li style="--i:12"></li><li style="--i:13"></li><li style="--i:14"></li><li style="--i:15"></li><li style="--i:16"></li><li style="--i:17"></li></ul>
+  <svg class="nui" viewBox="0 0 800 200" preserveAspectRatio="none">
+    <path class="nui-xa"  d="M0,110 C90,70 170,95 260,80 C360,62 430,100 520,86 C610,70 700,96 800,78 L800,200 L0,200 Z"/>
+    <g transform="translate(70,108) scale(1)"><rect x="-2" y="0" width="4" height="8" fill="#5b3a1e"/><polygon points="0,-34 -14,-10 -6,-10 -18,6 18,6 6,-10 14,-10" fill="#166534"/><polygon points="0,-34 -6,-24 6,-24" fill="#fff" opacity=".85"/></g><g transform="translate(130,118) scale(0.8)"><rect x="-2" y="0" width="4" height="8" fill="#5b3a1e"/><polygon points="0,-34 -14,-10 -6,-10 -18,6 18,6 6,-10 14,-10" fill="#15803d"/><polygon points="0,-34 -6,-24 6,-24" fill="#fff" opacity=".85"/></g><g transform="translate(250,96) scale(1.2)"><rect x="-2" y="0" width="4" height="8" fill="#5b3a1e"/><polygon points="0,-34 -14,-10 -6,-10 -18,6 18,6 6,-10 14,-10" fill="#14532d"/><polygon points="0,-34 -6,-24 6,-24" fill="#fff" opacity=".85"/></g><g transform="translate(330,112) scale(0.9)"><rect x="-2" y="0" width="4" height="8" fill="#5b3a1e"/><polygon points="0,-34 -14,-10 -6,-10 -18,6 18,6 6,-10 14,-10" fill="#166534"/><polygon points="0,-34 -6,-24 6,-24" fill="#fff" opacity=".85"/></g><g transform="translate(470,104) scale(1.1)"><rect x="-2" y="0" width="4" height="8" fill="#5b3a1e"/><polygon points="0,-34 -14,-10 -6,-10 -18,6 18,6 6,-10 14,-10" fill="#15803d"/><polygon points="0,-34 -6,-24 6,-24" fill="#fff" opacity=".85"/></g><g transform="translate(560,116) scale(0.8)"><rect x="-2" y="0" width="4" height="8" fill="#5b3a1e"/><polygon points="0,-34 -14,-10 -6,-10 -18,6 18,6 6,-10 14,-10" fill="#14532d"/><polygon points="0,-34 -6,-24 6,-24" fill="#fff" opacity=".85"/></g><g transform="translate(660,100) scale(1.15)"><rect x="-2" y="0" width="4" height="8" fill="#5b3a1e"/><polygon points="0,-34 -14,-10 -6,-10 -18,6 18,6 6,-10 14,-10" fill="#166534"/><polygon points="0,-34 -6,-24 6,-24" fill="#fff" opacity=".85"/></g><g transform="translate(740,112) scale(0.9)"><rect x="-2" y="0" width="4" height="8" fill="#5b3a1e"/><polygon points="0,-34 -14,-10 -6,-10 -18,6 18,6 6,-10 14,-10" fill="#15803d"/><polygon points="0,-34 -6,-24 6,-24" fill="#fff" opacity=".85"/></g>
+    <path class="nui-gan" d="M0,150 C110,118 210,152 320,136 C430,120 520,156 640,138 C710,128 760,140 800,134 L800,200 L0,200 Z"/>
+  </svg>
+  <div class="san-tuyet"></div>
+</div>
+
+<div class="khung-game">
+
+  <!-- Nút góc trên phải -->
+  <div class="nut-goc">
+    <button id="btnTamDung" class="nut-kinh" type="button" aria-label="Tạm dừng" title="Tạm dừng (P)" hidden>⏸</button>
+    <button id="btnAmThanh" class="nut-kinh" type="button" aria-pressed="false" aria-label="Bật âm thanh" title="Bật/tắt âm thanh">🔇</button>
+  </div>
+
+  <!-- ===== 1. MÀN HÌNH BẮT ĐẦU ===== -->
+  <section id="manBatDau" class="man man-giua" aria-labelledby="tieuDe">
+    <div class="bang-kinh">
+      <span class="eyebrow">🎄 Mini game Giáng sinh · 30 giây</span>
+      <h1 id="tieuDe" class="tieu-de">Đập <span class="chu-do">Noel</span></h1>
+      <p class="mo-ta">Đập đúng bạn, né bạn tinh nghịch. Càng về sau càng nhanh!</p>
+
+      <div class="hang-the hai">
+        <div class="the-kinh"><div class="nhan">Kỷ lục</div><div class="so" id="bdKyLuc">—</div></div>
+        <div class="the-kinh"><div class="nhan">Combo max</div><div class="so" id="bdComboKyLuc">—</div></div>
+      </div>
+
+      <ul class="bang-luat" aria-label="Luật tính điểm">
+        <li><span class="anh" data-anh="martin"></span><span class="ten">Martin <small>hiếm, chạy nhanh</small></span><b class="duong">+3</b></li>
+        <li><span class="anh" data-anh="xuka"></span><span class="ten">Xuka</span><b class="duong">+1</b></li>
+        <li><span class="anh" data-anh="mina"></span><span class="ten">Mina <small>đừng đập!</small></span><b class="am">−2</b></li>
+      </ul>
+
+      <button id="btnBatDau" class="btn btn-primary btn-lg rong" type="button">Bắt đầu</button>
+    </div>
+  </section>
+
+  <!-- ===== 2. MÀN HÌNH CHƠI ===== -->
+  <section id="manChoi" class="man man-choi" hidden aria-label="Đang chơi">
+    <div class="hud">
+      <div class="hang-the bon">
+        <div class="the-kinh"><div class="nhan">Điểm</div><div class="so" id="choiDiem">0</div></div>
+        <div class="the-kinh"><div class="nhan">Còn</div><div class="so" id="choiThoiGian">30</div></div>
+        <div class="the-kinh" id="theCombo"><div class="nhan">Combo</div><div class="so" id="choiCombo">0</div></div>
+        <div class="the-kinh" id="theKyLuc"><div class="nhan">Kỷ lục</div><div class="so" id="choiKyLuc">—</div></div>
+      </div>
+
+      <div class="tien-trinh" aria-hidden="true"><div id="thanhTienTrinh" class="tien-trinh-day"></div></div>
+      <div class="ten-chang" aria-hidden="true">
+        <span data-chang="0" class="dang">Khởi động</span>
+        <span data-chang="1">Tăng tốc</span>
+        <span data-chang="2">🎄 Siêu tốc</span>
+      </div>
+      <div class="hang-nhan" aria-live="off">
+        <span id="nhanChang" class="badge accent" hidden>Tăng tốc!</span>
+      </div>
+    </div>
+
+    <div class="san">
+      <div id="bang" class="bang" role="group" aria-label="Lưới 3×3"></div>
+      <div id="lopPhu" class="lop-phu" hidden>
+        <span id="lopPhuChu" class="lop-phu-chu">3</span>
+        <button id="btnTiepTuc" class="btn btn-primary btn-lg" type="button" hidden>Tiếp tục</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 3. MÀN HÌNH KẾT QUẢ ===== -->
+  <section id="manKetQua" class="man man-giua" hidden aria-labelledby="kqTieuDe">
+    <div class="bang-kinh">
+      <h1 id="kqTieuDe" class="tieu-de">Hết giờ!</h1>
+      <div class="diem-lon" id="kqDiem">0</div>
+      <div class="hang-nhan giua">
+        <span id="kqKyLucMoi" class="badge accent" hidden>Kỷ lục mới!</span>
+        <span id="kqComboKyLuc" class="badge combo" hidden>Combo kỷ lục!</span>
+      </div>
+
+      <div class="hang-the hai">
+        <div class="the-kinh"><div class="nhan">Martin</div><div class="so" id="kqSoChuot">0</div></div>
+        <div class="the-kinh"><div class="nhan">Xuka</div><div class="so" id="kqTrung">0</div></div>
+        <div class="the-kinh"><div class="nhan">Đập nhầm Mina</div><div class="so" id="kqTruot">0</div></div>
+        <div class="the-kinh"><div class="nhan">Tỉ lệ</div><div class="so" id="kqTiLe">—</div></div>
+      </div>
+      <div class="the-kinh dong-combo">
+        Combo dài nhất: <strong id="kqCombo">0</strong>
+        <span class="mo">(KL: <span id="kqComboKL">—</span>)</span>
+      </div>
+
+      <button id="btnChoiLai" class="btn btn-primary btn-lg rong" type="button">Chơi lại</button>
+      <button id="btnVeChinh" class="btn btn-ghost rong" type="button">Về màn hình chính</button>
+    </div>
+  </section>
+
+</div>
+
+<!-- Bảng gỡ lỗi: bật bằng phím D hoặc thêm ?debug=1 vào đường dẫn -->
+<pre id="goLoi" class="go-loi" hidden></pre>
+
+<!-- Vùng đọc cho trình đọc màn hình (cập nhật mỗi 5 giây khi chơi) -->
+<div id="vungDoc" class="sr-only" aria-live="polite"></div>
+
+<!-- 3 nhân vật (vẽ bằng SVG, thiết kế riêng) — nhân bản vào từng ô, CSS hiện đúng nhân vật theo data-loai -->
+<template id="mauNhanVat">
+  <!-- MARTIN: cậu bé đội mũ Noel, khăn xanh · +3 -->
+  <svg class="nhan-vat nv-martin" viewBox="0 0 100 120" aria-hidden="true">
+    <ellipse cx="50" cy="112" rx="34" ry="24" fill="#dc2626"/>
+    <path d="M30 92 Q50 104 70 92 L72 100 Q50 112 28 100 Z" fill="#16a34a"/>
+    <rect x="62" y="96" width="9" height="18" rx="3" fill="#15803d"/>
+    <circle cx="50" cy="62" r="25" fill="#fcd9b6"/>
+    <path d="M26 58 Q28 44 40 42 L60 42 Q72 44 74 58 Q66 50 50 50 Q34 50 26 58 Z" fill="#7c4a1e"/>
+    <path d="M24 44 Q30 12 66 6 Q80 6 82 18 Q70 14 66 22 Q74 34 76 44 Z" fill="#dc2626"/>
+    <rect x="20" y="38" width="60" height="11" rx="5.5" fill="#fff"/>
+    <circle cx="82" cy="18" r="7" fill="#fff"/>
+    <g class="mat-thuong"><circle cx="41" cy="62" r="4" fill="#1f2937"/><circle cx="59" cy="62" r="4" fill="#1f2937"/><circle cx="42.4" cy="60.6" r="1.4" fill="#fff"/><circle cx="60.4" cy="60.6" r="1.4" fill="#fff"/></g>
+    <g class="mat-choang" stroke="#1f2937" stroke-width="2.6" stroke-linecap="round"><path d="M37 58 l7 7 M44 58 l-7 7"/><path d="M56 58 l7 7 M63 58 l-7 7"/></g>
+    <ellipse cx="33" cy="71" rx="4.5" ry="2.8" fill="#fb7185" opacity=".6"/><ellipse cx="67" cy="71" rx="4.5" ry="2.8" fill="#fb7185" opacity=".6"/>
+    <path d="M41 73 Q50 82 59 73" stroke="#7c2d12" stroke-width="2.4" fill="#fff" stroke-linejoin="round"/>
+    <g class="sao" fill="#facc15"><path d="M14 30 l2 5 5 .5 -4 3 1.5 5 -4.5 -3 -4.5 3 1.5 -5 -4 -3 5 -.5z"/><path d="M86 28 l1.6 4 4 .4 -3 2.4 1 4 -3.6 -2.4 -3.6 2.4 1 -4 -3 -2.4 4 -.4z"/></g>
+  </svg>
+  <!-- XUKA: cô bé tóc cam, cài sừng tuần lộc · +1 -->
+  <svg class="nhan-vat nv-xuka" viewBox="0 0 100 120" aria-hidden="true">
+    <g stroke="#92400e" stroke-width="3.2" stroke-linecap="round" fill="none">
+      <path d="M32 34 L22 12 M27 23 L16 20 M24 16 L28 8"/><path d="M68 34 L78 12 M73 23 L84 20 M76 16 L72 8"/>
+    </g>
+    <path d="M22 62 Q20 92 30 104 L70 104 Q80 92 78 62 Z" fill="#ea580c"/>
+    <ellipse cx="50" cy="112" rx="32" ry="22" fill="#16a34a"/>
+    <path d="M26 104 h48" stroke="#fff" stroke-width="3" stroke-dasharray="4 4"/>
+    <circle cx="50" cy="62" r="24" fill="#fde2c8"/>
+    <path d="M26 60 Q26 36 50 36 Q74 36 74 60 Q66 46 54 48 Q44 44 36 50 Q30 52 26 60 Z" fill="#ea580c"/>
+    <path d="M28 40 Q50 28 72 40" stroke="#b45309" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <g class="mat-thuong"><ellipse cx="41" cy="62" rx="3.6" ry="4.4" fill="#1f2937"/><ellipse cx="59" cy="62" rx="3.6" ry="4.4" fill="#1f2937"/><circle cx="42.2" cy="60.6" r="1.3" fill="#fff"/><circle cx="60.2" cy="60.6" r="1.3" fill="#fff"/><path d="M36 56 l-3 -2 M64 56 l3 -2" stroke="#1f2937" stroke-width="1.6" stroke-linecap="round"/></g>
+    <g class="mat-choang" stroke="#1f2937" stroke-width="2.6" stroke-linecap="round"><path d="M37 58 l7 7 M44 58 l-7 7"/><path d="M56 58 l7 7 M63 58 l-7 7"/></g>
+    <circle cx="50" cy="70" r="3.2" fill="#ef4444"/>
+    <ellipse cx="33" cy="71" rx="4.5" ry="2.8" fill="#fb7185" opacity=".7"/><ellipse cx="67" cy="71" rx="4.5" ry="2.8" fill="#fb7185" opacity=".7"/>
+    <path d="M44 76 Q50 81 56 76" stroke="#9a3412" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+    <g class="sao" fill="#facc15"><path d="M14 30 l2 5 5 .5 -4 3 1.5 5 -4.5 -3 -4.5 3 1.5 -5 -4 -3 5 -.5z"/><path d="M86 28 l1.6 4 4 .4 -3 2.4 1 4 -3.6 -2.4 -3.6 2.4 1 -4 -3 -2.4 4 -.4z"/></g>
+  </svg>
+  <!-- MINA: cô yêu tinh tinh nghịch, mũ tím, cầm cục than · −2 -->
+  <svg class="nhan-vat nv-mina" viewBox="0 0 100 120" aria-hidden="true">
+    <ellipse cx="50" cy="112" rx="32" ry="22" fill="#6d28d9"/>
+    <path d="M18 66 L8 56 L24 60 Z M82 66 L92 56 L76 60 Z" fill="#f1c9a5"/>
+    <circle cx="50" cy="62" r="24" fill="#f1c9a5"/>
+    <path d="M26 62 Q24 40 44 38 Q62 36 74 56 Q64 48 52 50 Q38 50 26 62 Z" fill="#3b0764"/>
+    <path d="M24 46 Q34 14 62 10 Q86 8 92 30 Q80 22 70 26 Q76 36 76 46 Z" fill="#7c3aed"/>
+    <rect x="22" y="40" width="56" height="10" rx="5" fill="#a78bfa"/>
+    <circle cx="92" cy="31" r="5" fill="#facc15"/>
+    <g class="mat-thuong">
+      <path d="M36 61 Q41 57 46 61" stroke="#1f2937" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+      <circle cx="59" cy="62" r="4" fill="#1f2937"/><circle cx="60.3" cy="60.7" r="1.3" fill="#fff"/>
+      <path d="M53 54 L65 52" stroke="#3b0764" stroke-width="2.4" stroke-linecap="round"/>
+    </g>
+    <g class="mat-choang" stroke="#1f2937" stroke-width="2.6" stroke-linecap="round"><path d="M37 58 l7 7 M44 58 l-7 7"/><path d="M56 58 l7 7 M63 58 l-7 7"/></g>
+    <path d="M42 75 Q52 80 60 72" stroke="#7f1d1d" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+    <ellipse cx="34" cy="71" rx="4" ry="2.5" fill="#fb7185" opacity=".55"/>
+    <path d="M70 100 l6 -6 8 2 3 7 -5 7 -9 -1 z" fill="#1f2937"/><path d="M74 98 l3 -2" stroke="#6b7280" stroke-width="1.5"/>
+    <g class="sao" fill="#facc15"><path d="M14 30 l2 5 5 .5 -4 3 1.5 5 -4.5 -3 -4.5 3 1.5 -5 -4 -3 5 -.5z"/><path d="M86 28 l1.6 4 4 .4 -3 2.4 1 4 -3.6 -2.4 -3.6 2.4 1 -4 -3 -2.4 4 -.4z"/></g>
+  </svg>
+</template>
+
+<script src="game.js"></script>
+</body>
+</html>

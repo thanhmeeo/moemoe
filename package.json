@@ -1,0 +1,13 @@
+{
+  "name": "moemoe-dap-chuot",
+  "version": "1.0.0",
+  "description": "Mini game Đập Chuột (bản gốc và bản Poodle Bão tuyết)",
+  "private": true,
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

@@ -1,0 +1,174 @@
+/* =====================================================================
+   Đập Chuột — Design tokens
+   Phong cách học từ getdesign.md (chỉ học phong cách, không sao chép
+   logo, hình ảnh hay nội dung):
+   - Giao diện tối, nền xám than xanh, thẻ tối hơn một bậc, viền mảnh.
+   - Một màu nhấn cam rực cho hành động chính, xanh trời cho liên kết.
+   - Font Inter (dự phòng font hệ thống), tiêu đề đậm 700, chữ phụ xám.
+   - Bo góc nhỏ (6–8px), bóng đổ nhẹ, lưới 4px, nội dung rộng tối đa 1280px.
+   Chỉ dùng biến CSS, không tải tài nguyên bên ngoài.
+   ===================================================================== */
+
+:root {
+  color-scheme: dark;
+
+  /* ---------- 1. MÀU GỐC (primitive) ---------- */
+
+  /* Xám than (nền, bề mặt, viền) */
+  --gray-950: #111827;
+  --gray-900: #1a1f29;
+  --gray-850: #1f2937;   /* bề mặt thẻ */
+  --gray-800: #222831;   /* nền trang */
+  --gray-750: #2b3340;
+  --gray-700: #374151;   /* viền, nút phụ */
+  --gray-600: #4b5563;
+  --gray-500: #6b7280;
+  --gray-400: #9ca3af;   /* chữ phụ */
+  --gray-300: #d1d5db;
+  --gray-100: #f3f4f6;
+  --white:    #ffffff;
+
+  /* Cam — màu nhấn chính */
+  --orange-300: #fdba74;
+  --orange-400: #fb923c;
+  --orange-500: #f97316; /* màu thương hiệu */
+  --orange-600: #ea580c;
+  --orange-950: #2a1407;
+
+  /* Xanh trời — liên kết, focus, thông tin */
+  --sky-300: #7dd3fc;
+  --sky-400: #38bdf8;
+  --sky-500: #0ea5e9;
+
+  /* Trạng thái */
+  --green-400: #4ade80;
+  --green-500: #22c55e;
+  --yellow-400: #facc15;
+  --red-400: #f87171;
+  --red-500: #ef4444;
+
+  /* ---------- 2. MÀU THEO VAI TRÒ (semantic) ---------- */
+
+  --color-bg:            var(--gray-800);
+  --color-bg-sunken:     var(--gray-900);
+  --color-surface:       var(--gray-850);
+  --color-surface-hover: var(--gray-750);
+  --color-border:        var(--gray-700);
+  --color-border-strong: var(--gray-600);
+
+  --color-text:          var(--white);
+  --color-text-muted:    var(--gray-400);   /* 6,0:1 trên nền trang */
+  --color-text-subtle:   var(--gray-500);   /* chỉ dùng cho chữ ≥ 18px hoặc chú thích phụ */
+
+  --color-accent:        var(--orange-500);
+  --color-accent-hover:  var(--orange-400);
+  --color-accent-active: var(--orange-600);
+  --color-on-accent:     var(--gray-950);   /* chữ trên nền cam: 6,4:1, đạt AA */
+  --color-accent-soft:   var(--orange-950);
+
+  --color-link:          var(--sky-500);
+  --color-link-hover:    var(--sky-300);
+  --color-focus:         var(--sky-400);
+
+  --color-success: var(--green-400);
+  --color-warning: var(--yellow-400);
+  --color-danger:  var(--red-400);
+
+  /* ---------- 3. KIỂU CHỮ ---------- */
+
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+               Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  --weight-regular:  400;
+  --weight-medium:   500;
+  --weight-semibold: 600;
+  --weight-bold:     700;
+
+  /* ---------- 4. CỠ CHỮ (cỡ / chiều cao dòng) ---------- */
+
+  --text-xs:   12px;  --leading-xs:   16px;
+  --text-sm:   14px;  --leading-sm:   20px;
+  --text-base: 16px;  --leading-base: 26px;
+  --text-lg:   20px;  --leading-lg:   32px;
+  --text-xl:   24px;  --leading-xl:   32px;
+  --text-2xl:  32px;  --leading-2xl:  40px;
+  --text-3xl:  44px;  --leading-3xl:  50px;
+  --text-4xl:  58px;  --leading-4xl:  62px;   /* tiêu đề lớn nhất */
+
+  --tracking-tight: -0.02em;
+  --tracking-normal: 0;
+  --tracking-wide: 0.06em;                    /* nhãn nhỏ viết hoa */
+
+  /* ---------- 5. KHOẢNG CÁCH (lưới 4px) ---------- */
+
+  --space-0:  0;
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;   /* khoảng cách giữa các thẻ, padding thẻ */
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+
+  /* ---------- 6. BO GÓC ---------- */
+
+  --radius-sm:   4px;
+  --radius-md:   6px;    /* nút, ô nhập */
+  --radius-lg:   8px;    /* thẻ */
+  --radius-xl:   16px;   /* khung bảng chơi */
+  --radius-full: 9999px; /* nhãn, chấm tròn */
+
+  /* ---------- 7. BÓNG ĐỔ & VIỀN ---------- */
+
+  --border-width: 1px;
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.2);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 12px 24px -6px rgb(0 0 0 / 0.45);
+  --ring-focus: 0 0 0 3px rgb(56 189 248 / 0.45);
+
+  /* ---------- 8. KÍCH THƯỚC THÀNH PHẦN ---------- */
+
+  --control-h-sm: 32px;
+  --control-h-md: 40px;   /* nút và ô nhập mặc định */
+  --control-h-lg: 48px;   /* nút chính trong game, dễ chạm */
+  --btn-pad-x: 24px;
+  --btn-pad-y: 12px;
+
+  /* ---------- 9. BỐ CỤC ---------- */
+
+  --container-max: 1280px;
+  --content-max:   760px;   /* độ rộng đọc của tài liệu */
+
+  /* ---------- 10. CHUYỂN ĐỘNG ---------- */
+
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --duration-fast: 120ms;
+  --duration-base: 200ms;
+  --duration-slow: 320ms;
+
+  /* ---------- 11. RIÊNG CHO GAME ---------- */
+
+  --game-board-max:  480px;            /* cạnh tối đa của lưới 3×3 */
+  --game-cell-min:   80px;             /* cạnh ô tối thiểu trên điện thoại */
+  --game-gap:        var(--space-3);
+  --game-hole:       var(--gray-950);
+  --game-hole-rim:   var(--gray-700);
+  --game-mole:       #a16207;          /* thân chuột nâu */
+  --game-mole-hit:   var(--color-accent);
+  --game-timer-low:  var(--red-400);   /* 5 giây cuối */
+  --game-combo:      var(--yellow-400);
+}
+
+/* Người dùng bật "giảm chuyển động" thì tắt hiệu ứng */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 0ms;
+    --duration-base: 0ms;
+    --duration-slow: 0ms;
+  }
+}
