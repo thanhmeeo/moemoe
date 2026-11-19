@@ -8,7 +8,7 @@ Repo có ba bản game:
 |---|---|---|
 | Game gốc | `app/` | — |
 | Poodle Bão tuyết | `app-poodle/` | https://thanhmeeo.github.io/moemoe/app-poodle/ |
-| Đập Noel · Giáng sinh (Martin +3, Xuka +1, Mina −2) | `app-noel/` | https://thanhmeeo.github.io/moemoe/app-noel/ |
+| **Pushing** · Christmas Wonderland (Martin +3, Xuka +1, Mina −2) | `app-noel/` | https://thanhmeeo.github.io/moemoe/app-noel/ |
 
 ## Cấu trúc
 
